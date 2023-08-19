@@ -7,6 +7,7 @@ document.querySelector('#register-form').addEventListener('submit', (event) => {
   const username = document.querySelector('#username').value;
   const password = document.querySelector('#password').value;
   const confirmPassword = document.querySelector('#confirm-password').value;
+  const homeButton = document.getElementById('homeButton');
 
   // Verifica que la contraseña y la confirmación de contraseña sean iguales
   if (password !== confirmPassword) {
@@ -42,4 +43,9 @@ document.querySelector('#register-form').addEventListener('submit', (event) => {
   .catch(error => {
       console.error('Error:', error);
   });
+});
+
+
+homeButton.addEventListener('click', () => {
+  window.location.href = '/index';
 });

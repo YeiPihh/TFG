@@ -1,43 +1,57 @@
 const express = require('express');
+const session = require('express-session'); // <-- Añade esta línea
 const path = require('path');
+const bodyParser = require('body-parser');
 const app = express();
 const server = require('http').Server(app);
 const socketio = require('socket.io')(server);
+const passport = require('passport');
+require('./passport-config')(passport);
+
+
+app.set('view engine', 'ejs');
+
+// Configurar la carpeta donde estarán tus vistas
+app.set('views', path.join(__dirname, 'views'));
+
+
 
 var registerRoute = require('./src/routes/registerRoute');
 var loginRoute = require('./src/routes/loginRoute');
-
-// Importa y ejecuta la función del archivo socket.js
 require('./socket.js')(socketio);
-//files
+
 app.use(express.static(path.join(__dirname, 'public')));
-
-
-
-/*log in y registro */
-const bodyParser = require('body-parser'); // Ejemplo de middleware para parsear el cuerpo de las solicitudes
-
-// Configuración de middleware
-app.use(bodyParser.urlencoded({ extended: true })); // Middleware para parsear datos del formulario
-
-
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Configura las sesiones ANTES de las rutas y Passport
+app.use(session({
+  secret: '020901',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // Cambia a true si estás usando HTTPS
+}));
 
-// Resto de la configuración y middleware
+// Inicialización de Passport
+app.use(passport.initialize());
+app.use(passport.session()); // <-- Asegúrate de que esta línea esté después de la configuración de session
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    res.redirect('/login');
+}
+
+
 
 app.use('/register', registerRoute);
 app.use('/login', loginRoute);
 
-
-app.get('/chat', (req, res) => {
-    res.sendFile(__dirname + '/public/chat.html');
-});
 app.get('/login', (req, res) => {
     res.sendFile(__dirname + '/public/login.html');
 });
@@ -47,8 +61,14 @@ app.get('/register', (req, res) => {
 app.get('/index', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
-
-
+app.get('/chat', ensureAuthenticated, (req, res) => {
+    res.render('chat', {user: req.user});
+});
+app.get('/logout', (req, res) => {
+    req.session.destroy(function(err) {
+        res.redirect('/login');  // Redirecciona al usuario a la página de inicio de sesión
+    });
+});
 
 
 

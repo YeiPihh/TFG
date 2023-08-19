@@ -23,15 +23,9 @@
     <header class="header">
         <h1 class="title">Chat de Texto en Tiempo Real</h1>
         <br>
-        <nav class="navigation">
-            <ul class="nav-list">
-                <li>
-                    <a href="/index" class="nav-link">
-                        <span class="material-symbols-outlined">home</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+            <div class="nav-list">
+                <span id="homeButton" class="material-symbols-outlined">home</span>
+            </div>
     </header>
 
     <br>
@@ -46,14 +40,10 @@
       <button type="submit">Iniciar Sesión</button>
     </form>
     <p class="login-link">¿No tienes una cuenta? <a href="/register"> Regístrate aquí</a></p>
-  </div>
-  
-
-  <script src="/socket.io/socket.io.js" charset="UTF-8"></script>
-  <script src="./js/socketClient.js"></script> 
-  <script src="./js/login.js"></script>
-
-                                                                                
+  </div>                                                                         
     
 </body>
+<script src="/socket.io/socket.io.js" charset="UTF-8"></script>
+<script src="./js/socketClient.js"></script> 
+<script src="./js/login.js"></script>
 </html>

@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql2/promise'); // Usa la versión promisificada para async/await
 var { check, validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
+
+
 
 // Crea la conexión a la base de datos
 var connection;
@@ -38,8 +41,9 @@ router.post('/', [
             return res.status(400).json({ msg: 'User already exists' });
         }
 
-        // Crea un nuevo usuario
-        await connection.execute('INSERT INTO users (username, password) VALUES (?, ?)', [username, password]);
+        // Crea un nuevo usuario y hashea la contraseña
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await connection.execute('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword]);
         res.status(201).json({ msg: 'User registered successfully' });
         
 

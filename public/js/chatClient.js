@@ -5,7 +5,8 @@ const chatForm = document.getElementById('chat-form');
 const chatItems = document.querySelectorAll('.chat-item');
 const chatMessagesContainer = document.getElementById('chat-messages');
 
-
+const logoutButton = document.getElementById('logoutButton');
+const homeButton = document.getElementById('homeButton');
 
 const messageInput = document.getElementById('message-input');
 const sendIcon = document.getElementById('icon-send');
@@ -82,4 +83,13 @@ sendIcon.addEventListener('click', () => {
         messageInput.value = '';  // Limpia el input después de enviar el mensaje
     }
 });
+
+logoutButton.addEventListener('click', () => {
+    window.location.href = '/logout';
+});
+
+homeButton.addEventListener('click', () => {
+    window.location.href = '/index';
+});
+
 

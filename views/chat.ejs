@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href=".\css\styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
@@ -13,24 +13,17 @@
 
 <div class="chat-container">
     <div class="chat-sidebar">
-        <ul class="nav-list">
-            <li>
-                <a href="/index" class="nav-link">
-                    <span id="icon-home" class="material-symbols-outlined">home</span>
-                </a>
-            </li>
-        </ul>
-        <!-- Aquí estarían los items de cada chat, como en WhatsApp -->
+        <div class="nav-list">
+            <button id="homeButton" class="material-symbols-outlined">home</button>
+            <span class="username-side"> <%= user.username %></span>
+        </div>
+        <!-- Aquí estarían los items de cada chat -->
         <div class="chat-item">Amigo 1</div>
         <div class="chat-item">Amigo 2</div>
         <!-- ... y así sucesivamente -->
-        <ul class="nav-list-logout">
-            <li>
-                <a href="/login" class="logout-link">
-                    <span id="icon-logout" class="material-symbols-outlined">logout</span>
-                </a>
-            </li>
-        </ul>
+        <div class="nav-list-logout">
+            <button id="logoutButton" class="material-symbols-outlined">logout</button>
+        </div>
     </div>
 
     <div class="chat-main">

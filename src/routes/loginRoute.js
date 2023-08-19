@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var mysql = require('mysql2/promise'); // Usa la versión promisificada para async/await
-var { check, validationResult } = require('express-validator');
+var mysql = require('mysql2/promise');
+var passport = require('passport');
 
 // Crea la conexión a la base de datos
 var connection;
@@ -16,24 +16,22 @@ mysql.createConnection({
     console.error('No se pudo conectar a la base de datos:', err);
 });
 
-
-router.post('/', async function(req, res) {
-    const { username, password } = req.body;
-
-    try {
-        // Comprueba si el usuario existe y la contraseña es correcta
-        const [rows] = await connection.execute('SELECT * FROM users WHERE username = ? AND password = ?', [username, password]);
-        if (rows.length > 0) {
-            // Si el usuario existe y la contraseña es correcta, envía una respuesta positiva
-            return res.status(200).json({ message: 'Logged in successfully' });
-        } else {
-            // Si el usuario no existe o la contraseña no es correcta, envía una respuesta negativa
-            return res.status(400).json({ message: 'Invalid username or password' });
+router.post('/', function(req, res, next) {
+    passport.authenticate('local', function(err, user, info) {
+        if (err) {
+            return res.status(500).json({ error: 'Ocurrió un error en el servidor.' });
         }
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).send('Server error');
-    }
+        if (!user) {
+            return res.status(401).json({ error: 'Usuario o contraseña incorrecta' });
+        }
+        req.logIn(user, function(err) {
+            if (err) {
+                return res.status(500).json({ error: 'Ocurrió un error en el servidor.' });
+            }
+            return res.json({ message: 'Logged in successfully' });
+        });
+    })(req, res, next);
 });
+
 
 module.exports = router;
