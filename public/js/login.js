@@ -24,20 +24,25 @@ loginForm.addEventListener('submit', (event) => {
         }
     })
     .then(data => {
+        console.log('Received data:', data);
         if (data && data.message === 'Logged in successfully') {
             window.location.href = '/chat';
-        } else if (data && data.error) {
-            alert(data.error);
-            usernameInput.style.borderColor = 'red';
-            passwordInput.style.borderColor = 'red';
         }
     })
     .catch(err => {
-        err.json().then(errorData => {
-            console.error(errorData);
-            usernameInput.style.borderColor = 'red';
-            passwordInput.style.borderColor = 'red';
-        });
+        if (err.status === 401) {
+            err.json().then(errorData => {
+                if (errorData.error === 'Usuario o contraseña incorrecta') {
+                    alert(errorData.error);
+                    usernameInput.style.borderColor = 'red';
+                    passwordInput.style.borderColor = 'red';
+                } else {
+                    console.error(errorData);
+                }
+            });
+        } else {
+            console.error('Unhandled error:', err);
+        }
     });
 });
 
