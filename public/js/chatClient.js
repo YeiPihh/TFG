@@ -1,5 +1,4 @@
 // chatClient.js
-
 // Obtener referencia a los elementos del DOM
 const chatForm = document.getElementById('chat-form');
 const chatItems = document.querySelectorAll('.chat-item');
@@ -19,28 +18,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // Establecer conexión con Socket.io (asumiendo que tienes Socket.io configurado)   const socket = io();
 
+let receiverId = null;
 
-// Evento para enviar mensajes
-chatForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const messageInput = messageInput.value;
-    
-    // Emitir evento de mensaje al servidor
-    socket.emit('sendMessage', messageInput.value);
-
-    const messageData = {
-        senderId: userId, // Debes obtener el ID del remitente
-        receiverId: receiverId, // Debes obtener el ID del destinatario
-        content: messageContent,
-      };
-    
-
-    // Limpiar el input
-    messageInput.value = '';
-    messageInput.focus();
-
-
-});
 
 // Escuchar mensajes del servidor
 socket.on('receiveMessage', (message) => {
@@ -56,6 +35,40 @@ socket.on('receiveMessage', (message) => {
 chatItems.forEach(item => {
     item.addEventListener('click', async (event) => {
         const chatId = item.dataset.id;
+        const receiverId = item.dataset.receiverId;
+
+        try {
+            const response = await fetch(`/chat-history/${chatId}`);
+            const text = await response.text(); // Obtén la respuesta como texto
+            console.log('Respuesta como texto:', text); // Imprímela en la consola
+
+            const data = JSON.parse(text); // Analiza la respuesta como JSON
+
+            if (data.success && data.messages) {
+                chatMessagesContainer.innerHTML = '';
+                data.messages.forEach(message => {
+                    const messageElement = document.createElement('p');
+                    messageElement.textContent = message.content;
+                    chatMessagesContainer.appendChild(messageElement);
+                });
+            } else {
+                console.error('Error al obtener el historial del chat:', data.error);
+            }
+        } catch (error) {
+            console.error('Error al hacer la solicitud:', error);
+        }
+    });
+});
+
+
+// Evento para seleccionar un chat específico
+chatItems.forEach(item => {
+    item.addEventListener('click', async (event) => {
+        const chatId = item.dataset.id;
+        const contactName = item.textContent; // Aquí obtienes el nombre del contacto
+
+        // Actualizar el nombre del contacto en la cabecera del chat
+        document.getElementById('contactNameText').textContent = contactName;
 
         try {
             const response = await fetch(`/chat-history/${chatId}`);
@@ -76,6 +89,7 @@ chatItems.forEach(item => {
         }
     });
 });
+
 
 
 // Escuchar eventos del socket (esto es solo un ejemplo).
@@ -127,3 +141,31 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   });
+
+
+
+chatForm.addEventListener('submit', (event) => {
+    event.preventDefault(); // Esto previene la recarga de la página
+
+    const messageContent = messageInput.value;
+    if (messageContent.trim()) { // Solo enviar si el mensaje no está vacío
+        const messageData = {
+            senderId: userId, // Asegúrate de tener el ID del remitente
+            receiverId: receiverId, // Asegúrate de tener el ID del destinatario
+            content: messageContent,
+        };
+
+        socket.emit('sendMessage', messageData);
+
+        const messageElement = document.createElement('p');
+        messageElement.textContent = messageContent;
+        chatMessagesContainer.appendChild(messageElement);
+
+        // Auto-scroll al último mensaje
+        chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+
+        // Limpiar el input
+        messageInput.value = '';
+        messageInput.focus();
+    }
+});

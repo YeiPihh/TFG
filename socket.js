@@ -2,6 +2,15 @@
 var mysql = require('mysql2/promise');
 
 
+async function saveMessage(senderId, receiverId, content) {
+    try {
+      await connection.query('INSERT INTO messages (sender_id, receiver_id, content, timestamp) VALUES (?, ?, ?, NOW())', [senderId, receiverId, content]);
+    } catch (error) {
+      console.error('Error al guardar el mensaje:', error);
+    }
+}
+
+
 var connection;
 mysql.createConnection({
     host: 'localhost',
@@ -68,6 +77,15 @@ module.exports = function(socketio) {
                 console.error('Error al agregar contacto:', error);
             }
         });
+
+        socket.on('sendMessage', async (data) => {
+            const { senderId, receiverId, content } = data;
+            await saveMessage(senderId, receiverId, content);
+          
+            // Puedes reenviar el mensaje al destinatario si es necesario
+            // socket.to(receiverId).emit('receiveMessage', content);
+          });
+          
         
         
 

@@ -1,3 +1,4 @@
+<!--chat.ejs-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +22,7 @@
         <!-- Aquí estarían los items de cada chat -->
         <div class="nav-list-chat">
             <% contacts.forEach(contact => { %>
-                <div class="chat-item" data-id="<%= chatId %>"><%= contact.username %></div>
+                <div class="chat-item" data-id="<%= contact.id %>" data-receiver-id="<%= contact.contact_id %>"><%= contact.username %></div>
               <% }); %>
         </div>
        
@@ -39,7 +40,7 @@
 
     <div class="chat-main">
         <div class="chat-header" id="contactName">
-            <!-- NOMBRE DEL CONTACTO-->
+           <p id="contactNameText"></p> 
         </div>
 
         <div class="chat-messages" id="chat-messages">
@@ -54,12 +55,20 @@
         </div>
     </div>
 </div>
-<script src="/socket.io/socket.io.js" charset="UTF-8"></script>
-<script src="./js/socketClient.js"></script> 
-<script src="./js/chatClient.js"></script>
+
 <script>
     const username = '<%= user.username %>'; // Obtiene el nombre de usuario desde el servidor
     const userId = '<%= user.id %>';
+    
+</script>
+
+
+<script src="/socket.io/socket.io.js" charset="UTF-8"></script>
+<script src="./js/socketClient.js"></script> 
+<script src="./js/chatClient.js"></script>
+
+<script>
+    
     socket.emit('registerUser', { username: username, userId: userId }); // Envía el nombre de usuario al servidor
   </script>
   

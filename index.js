@@ -1,3 +1,4 @@
+//index.js
 const express = require('express');
 const session = require('express-session'); // <-- Añade esta línea
 const path = require('path');
@@ -26,13 +27,33 @@ mysql.createConnection({
 
 async function getContactsForUser(userId) {
   try {
-    const [results] = await connection.query('SELECT c.contact_id, u.username FROM contacts c JOIN users u ON c.contact_id = u.id WHERE c.user_id = ?', [userId]);
+    const [results] = await connection.query('SELECT c.id, u.username FROM contacts c JOIN users u ON c.contact_id = u.id WHERE c.user_id = ?', [userId]);
     return results;
   } catch (error) {
     console.error('Error al obtener contactos:', error);
     return [];
   }
 }
+
+async function getChatHistory(userId, contactId) {
+  try {
+    // Ajusta esta consulta según tus necesidades
+    const [results] = await connection.query(
+      'SELECT m.* FROM messages m WHERE (m.sender_id = ? AND m.receiver_id = ?) OR (m.sender_id = ? AND m.receiver_id = ?) ORDER BY m.timestamp',
+      [userId, contactId, contactId, userId]
+    );
+    return results;
+  } catch (error) {
+    console.error('Error al obtener el historial del chat:', error);
+    return [];
+  }
+}
+
+
+
+
+
+
 
 
 
@@ -104,7 +125,7 @@ app.get('/logout', (req, res) => {
     });
 });
 
-app.get('/chat-history/chatId', ensureAuthenticated, async (req, res) => {
+app.get('/chat-history/:chatId', ensureAuthenticated, async (req, res) => {
     const chatId = req.params.chatId;
     const userId = req.user.id; // Suponiendo que tengas el ID del usuario en req.user
   
@@ -120,5 +141,5 @@ app.get('/chat-history/chatId', ensureAuthenticated, async (req, res) => {
 
 
 server.listen(3476, () => {
-    console.log('Server running on port 3000');
+    console.log('Server running on port 3476');
 });
