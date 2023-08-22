@@ -8,28 +8,38 @@
     <link rel="stylesheet" href=".\css\styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
 
 <div class="chat-container">
     <div class="chat-sidebar">
-        <div class="nav-list">
+        <div class="nav-list-chat">
             <button id="homeButton" class="material-symbols-outlined">home</button>
             <span class="username-side"> <%= user.username %></span>
         </div>
         <!-- Aquí estarían los items de cada chat -->
-        <div class="chat-item">Amigo 1</div>
-        <div class="chat-item">Amigo 2</div>
-        <!-- ... y así sucesivamente -->
+        <div class="nav-list-chat">
+            <% contacts.forEach(contact => { %>
+                <div class="chat-item" data-id="<%= chatId %>"><%= contact.username %></div>
+              <% }); %>
+        </div>
+       
         <div class="nav-list-logout">
             <button id="logoutButton" class="material-symbols-outlined">logout</button>
+        </div>
+        <div class="contact-icon">
+            <form id="addContactForm" style="display: none;">
+                <input type="text" id="newContactUsername" placeholder="Usuario del contacto">
+                <button type="submit">Añadir</button>
+              </form>
+            <button id="contactButton" class="material-symbols-outlined">add_circle</button>
         </div>
     </div>
 
     <div class="chat-main">
-        <div class="chat-header">
-            <!-- Aquí puede ir el nombre del contacto con el que estás chateando -->
-            Nombre del contacto
+        <div class="chat-header" id="contactName">
+            <!-- NOMBRE DEL CONTACTO-->
         </div>
 
         <div class="chat-messages" id="chat-messages">
@@ -47,5 +57,11 @@
 <script src="/socket.io/socket.io.js" charset="UTF-8"></script>
 <script src="./js/socketClient.js"></script> 
 <script src="./js/chatClient.js"></script>
+<script>
+    const username = '<%= user.username %>'; // Obtiene el nombre de usuario desde el servidor
+    const userId = '<%= user.id %>';
+    socket.emit('registerUser', { username: username, userId: userId }); // Envía el nombre de usuario al servidor
+  </script>
+  
 </body>
-</html
+</html>

@@ -1,10 +1,15 @@
 const mysql = require('mysql2');
 
-const connection = mysql.createConnection({
-  host: 'localhost', // Cambia esto si tu servidor MySQL está en otro lugar
-  user: 'root',      // Usuario de la base de datos (puede ser diferente)
-  password: 'toor',
-  database: 'dbChat'
+var connection;
+mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'toor',
+    database: 'dbChat'
+}).then(conn => {
+    connection = conn;
+}).catch(err => {
+    console.error('No se pudo conectar a la base de datos:', err);
 });
 
 

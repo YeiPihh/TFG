@@ -31,6 +31,9 @@ router.post('/', function(req, res, next) {
             return res.json({ message: 'Logged in successfully' });
         });
     })(req, res, next);
+
+    console.log(`Un nuevo usuario se ha logeado: ${req.body.username}`);
+
 });
 
 

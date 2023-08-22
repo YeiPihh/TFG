@@ -23,14 +23,23 @@ document.addEventListener("DOMContentLoaded", function() {
 // Evento para enviar mensajes
 chatForm.addEventListener('submit', (event) => {
     event.preventDefault();
-    const messageInput = document.getElementById('message-input');
+    const messageInput = messageInput.value;
     
     // Emitir evento de mensaje al servidor
     socket.emit('sendMessage', messageInput.value);
 
+    const messageData = {
+        senderId: userId, // Debes obtener el ID del remitente
+        receiverId: receiverId, // Debes obtener el ID del destinatario
+        content: messageContent,
+      };
+    
+
     // Limpiar el input
     messageInput.value = '';
     messageInput.focus();
+
+
 });
 
 // Escuchar mensajes del servidor
@@ -92,4 +101,29 @@ homeButton.addEventListener('click', () => {
     window.location.href = '/index';
 });
 
+document.getElementById('contactButton').addEventListener('click', () => {
+    document.getElementById('addContactForm').style.display = 'block'; // Mostrar el formulario
+  });
 
+document.getElementById('addContactForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const newContactUsername = document.getElementById('newContactUsername').value;
+  // Emitir un evento al servidor con el nuevo contacto
+  socket.emit('addContact', newContactUsername);
+  // Opcionalmente, puedes ocultar el formulario nuevamente
+  document.getElementById('addContactForm').style.display = 'none';
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const contactItems = document.querySelectorAll('.contact');
+    const contactNameElement = document.getElementById('contactName');
+  
+    contactItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const selectedContactName = item.textContent;
+        contactNameElement.textContent = selectedContactName;
+        
+        // Aquí puedes agregar lógica adicional si necesitas hacer algo más cuando se selecciona un contacto
+      });
+    });
+  });

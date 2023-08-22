@@ -9,6 +9,34 @@ const passport = require('passport');
 require('./passport-config')(passport);
 
 
+
+const mysql = require('mysql2/promise');
+
+var connection;
+mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'toor',
+    database: 'dbChat'
+}).then(conn => {
+    connection = conn;
+}).catch(err => {
+    console.error('No se pudo conectar a la base de datos:', err);
+});
+
+async function getContactsForUser(userId) {
+  try {
+    const [results] = await connection.query('SELECT c.contact_id, u.username FROM contacts c JOIN users u ON c.contact_id = u.id WHERE c.user_id = ?', [userId]);
+    return results;
+  } catch (error) {
+    console.error('Error al obtener contactos:', error);
+    return [];
+  }
+}
+
+
+
+
 app.set('view engine', 'ejs');
 
 // Configurar la carpeta donde estarán tus vistas
@@ -61,8 +89,14 @@ app.get('/register', (req, res) => {
 app.get('/index', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
-app.get('/chat', ensureAuthenticated, (req, res) => {
-    res.render('chat', {user: req.user});
+app.get('/chat', ensureAuthenticated, async (req, res) => {
+    const user = {
+        username: req.user.username,
+        id: req.user.id // Aquí es donde obtienes el ID del usuario desde tu base de datos o sesión
+      };
+    
+    const contacts = await getContactsForUser(user.id);
+    res.render('chat', { user: user, contacts: contacts });
 });
 app.get('/logout', (req, res) => {
     req.session.destroy(function(err) {
@@ -70,6 +104,16 @@ app.get('/logout', (req, res) => {
     });
 });
 
+app.get('/chat-history/chatId', ensureAuthenticated, async (req, res) => {
+    const chatId = req.params.chatId;
+    const userId = req.user.id; // Suponiendo que tengas el ID del usuario en req.user
+  
+    // Aquí debes obtener el historial del chat desde la base de datos
+    const chatHistory = await getChatHistory(userId, chatId);
+  
+    res.json({ success: true, messages: chatHistory });
+  });
+  
 
 
 

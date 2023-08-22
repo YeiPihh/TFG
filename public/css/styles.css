@@ -65,15 +65,21 @@ button:hover {
     margin-top: 10px;
 }
 
-.nav-list {
+.nav-list-chat {
     list-style: none;
     padding: 0;
     display: flex;
-    justify-content: center;
     padding: 20px;
     align-items: center;
+    justify-content: space-between;
 }
 
+.username-side{
+    margin-right: 20px;
+    font-size: 25px!important;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
 
 
 
@@ -113,6 +119,8 @@ button:hover {
 .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 200, 'opsz' 40;
 }
+
+
 
 /* Estilos generales para el chat */
 .chat-container {
@@ -234,8 +242,10 @@ button:hover {
 
 
 
-/*chat.html*/
 
+
+
+/*chat.html*/
 /* Incorporando el estilo del ícono */
 .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 200, 'opsz' 40;
@@ -295,6 +305,11 @@ button:hover {
     padding: 20px;
     border-bottom: 1px solid #bdc3c7;
 }
+
+
+
+
+
 /*
 .input-container {
     display: flex;
@@ -441,7 +456,28 @@ button:hover {
 
 
 
+.contact-icon {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    position: absolute; /* Fijar el elemento en una posición específica dentro de '.chat-sidebar' */
+    bottom: 20px; /* Espaciado desde la parte inferior */
+    left: 430px; /* Espaciado desde la izquierda */
+}
 
+#addContactForm{
+    margin: 0;
+    padding: 0;
+    position: absolute; /* Fijar el elemento en una posición específica dentro de '.chat-sidebar' */
+    bottom: 20px; /* Espaciado desde la parte inferior */
+    left: -130px; /* Espaciado desde la izquierda */
+}
+
+
+.nav-list-chat {
+    overflow-y: auto; /* Permite el desplazamiento vertical */
+    max-height: 400px; /* Altura máxima antes de que comience el desplazamiento */
+  }
 
 
 .nav-list-logout {
