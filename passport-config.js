@@ -27,7 +27,7 @@ module.exports = function(passport) {
           } else {
             return done(null, false, { message: 'Contraseña incorrecta' });
           }
-        } else {
+        } else {3
           return done(null, false, { message: 'Usuario no encontrado' });
         }
       } catch (err) {

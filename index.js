@@ -27,7 +27,7 @@ mysql.createConnection({
 
 async function getContactsForUser(userId) {
   try {
-    const [results] = await connection.query('SELECT c.id, u.username FROM contacts c JOIN users u ON c.contact_id = u.id WHERE c.user_id = ?', [userId]);
+    const [results] = await connection.query('SELECT c.contact_id, u.username FROM contacts c JOIN users u ON c.contact_id = u.id WHERE c.user_id = ?', [userId]);
     return results;
   } catch (error) {
     console.error('Error al obtener contactos:', error);
@@ -125,12 +125,12 @@ app.get('/logout', (req, res) => {
     });
 });
 
-app.get('/chat-history/:chatId', ensureAuthenticated, async (req, res) => {
-    const chatId = req.params.chatId;
+app.get('/chat-history/:contactId', ensureAuthenticated, async (req, res) => {
+    const contactId = req.params.contactId;
     const userId = req.user.id; // Suponiendo que tengas el ID del usuario en req.user
   
     // Aquí debes obtener el historial del chat desde la base de datos
-    const chatHistory = await getChatHistory(userId, chatId);
+    const chatHistory = await getChatHistory(userId, contactId);
   
     res.json({ success: true, messages: chatHistory });
   });

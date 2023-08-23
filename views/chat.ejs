@@ -22,7 +22,7 @@
         <!-- Aquí estarían los items de cada chat -->
         <div class="nav-list-chat">
             <% contacts.forEach(contact => { %>
-                <div class="chat-item" data-id="<%= contact.id %>" data-receiver-id="<%= contact.contact_id %>"><%= contact.username %></div>
+                <div class="chat-item" data-id="<%= contact.contact_id %>"><%= contact.username %></div>
               <% }); %>
         </div>
        
@@ -50,7 +50,7 @@
         <div class="input-container">
             <form id="chat-form">
                 <input type="text" id="message-input" placeholder="Escribe tu mensaje...">
-                <span id="icon-send" class="material-symbols-outlined">send</span>
+                <button type="submit" id="icon-send" class="material-symbols-outlined">send</button>
             </form>
         </div>
     </div>
