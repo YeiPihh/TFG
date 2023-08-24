@@ -75,6 +75,15 @@ button:hover {
     justify-content: space-between;
 }
 
+.nav-list-chat-head {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    padding: 20px;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .username-side{
     margin-right: 20px;
     font-size: 25px!important;
