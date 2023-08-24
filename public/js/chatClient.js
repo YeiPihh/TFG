@@ -21,21 +21,14 @@ document.addEventListener("DOMContentLoaded", function() {
 // Establecer conexión con Socket.io (asumiendo que tienes Socket.io configurado)   const socket = io();
 
 
-// Escuchar mensajes del servidor
-socket.on('receiveMessage', (message) => {
-    const messageElement = document.createElement('p');
-    messageElement.textContent = message;
-    chatMessagesContainer.appendChild(messageElement);
-    
-    // Auto-scroll al último mensaje
-    chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
-});
+
 
 // Evento para seleccionar un chat específico
 chatItems.forEach(item => {
     item.addEventListener('click', async (event) => {
         contactId = item.dataset.id;
         console.log("Contact ID:", contactId);
+        document.querySelector('#chat-form').style.display = 'block';
         
 
         try {
@@ -134,4 +127,13 @@ chatForm.addEventListener('submit', (event) => {
         messageInput.value = '';
         messageInput.focus();
     }
+});
+
+socket.on('receiveMessage', (messageData) => {
+    const messageElement = document.createElement('p');
+    messageElement.textContent = messageData.content; // Asegúrate de que "content" es la propiedad correcta
+    chatMessagesContainer.appendChild(messageElement);
+    
+    // Auto-scroll al último mensaje
+    chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
 });

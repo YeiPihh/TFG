@@ -30,20 +30,11 @@ module.exports = function(socketio) {
     socketio.on('connection', (socket) => {
         console.log('Un usuario se ha conectado');
         socket.on('registerUser', (data) => {
-            userSockets[data.username] = socket;
+            userSockets[data.userId] = socket;
             userIds[socket.id] = data.userId;
         });
 
-        socket.on('sendMessage', async (messageData) => {
-            // Insertar el mensaje en la base de datos
-            await connection.query('INSERT INTO messages (sender_id, receiver_id, content, timestamp) VALUES (?, ?, ?, ?)', [messageData.senderId, messageData.receiverId, messageData.content, new Date()]);
-      
-            // Emitir el mensaje al destinatario si está en línea
-            const receiverSocket = userSockets[messageData.receiverUsername];
-            if (receiverSocket) {
-              receiverSocket.emit('receiveMessage', messageData);
-            }
-          });
+
       
           socket.on('openChat', async (contactId) => {
             const userId = userIds[socket.id]; // Asumiendo que tienes una manera de obtener el userId
@@ -86,6 +77,12 @@ module.exports = function(socketio) {
           
             // Puedes reenviar el mensaje al destinatario si es necesario
             // socket.to(receiverId).emit('receiveMessage', content);
+
+            const receiverSocket = userSockets[receiverId]; // Asegúrate de tener una forma de obtener el socket del destinatario
+            if (receiverSocket) {
+              receiverSocket.emit('receiveMessage', data);
+            }
+
           });
           
         

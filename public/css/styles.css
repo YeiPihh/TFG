@@ -145,6 +145,16 @@ button:hover {
     border-radius: 20px;
     margin: 8px 12px;
     transition: background-color 0.3s;
+    width: 100%;
+
+}
+
+.nav-list-chat {
+    
+    overflow-y: auto; /* Permite el desplazamiento vertical */
+    overflow-x: hidden;
+    max-height: 400px; /* Altura máxima antes de que comience el desplazamiento */
+
 }
 
 .chat-item:hover {
@@ -474,10 +484,7 @@ button:hover {
 }
 
 
-.nav-list-chat {
-    overflow-y: auto; /* Permite el desplazamiento vertical */
-    max-height: 400px; /* Altura máxima antes de que comience el desplazamiento */
-  }
+
 
 
 .nav-list-logout {
