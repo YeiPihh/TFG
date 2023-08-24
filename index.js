@@ -12,13 +12,21 @@ require('./passport-config')(passport);
 
 
 const mysql = require('mysql2/promise');
+const url = require('url');
+
+const clearDBUrl = process.env.CLEARDB_DATABASE_URL; // URL de ClearDB de Heroku
+const parsedUrl = url.parse(clearDBUrl);
+const [username, password] = parsedUrl.auth.split(':');
+
+
+
 
 var connection;
 mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'toor',
-    database: 'dbChat'
+  host: parsedUrl.hostname,
+  user: username,
+  password: password,
+  database: parsedUrl.pathname.substring(1)
 }).then(conn => {
     connection = conn;
 }).catch(err => {
