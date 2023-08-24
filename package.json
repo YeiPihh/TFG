@@ -4,7 +4,7 @@
   "description": "Chat de texto a tiempo real",
   "main": "index.js",
   "scripts": {
-    "start": "node /index.js"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
