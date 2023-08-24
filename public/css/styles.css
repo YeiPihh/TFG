@@ -140,6 +140,7 @@ button:hover {
 }
 
 .chat-sidebar {
+    position: relative;
     width: 25%;
     background-color: #333; /* Oscuro igual que el footer de index.html */
     color: #ecf0f1;
