@@ -147,7 +147,7 @@ app.get('/chat-history/:contactId', ensureAuthenticated, async (req, res) => {
 
 
 
-
-server.listen(3476, () => {
-    console.log('Server running on port 3476');
+const port = process.env.PORT || 3000;
+server.listen(port, () => {
+    console.log(`Server running on port ${port}`);
 });
