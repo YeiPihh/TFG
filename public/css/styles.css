@@ -67,6 +67,7 @@ button:hover {
 
 .nav-list-chat {
     list-style: none;
+    flex-direction: column;
     padding: 0;
     display: flex;
     padding: 20px;
@@ -261,6 +262,23 @@ button:hover {
     font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 200, 'opsz' 40;
 }
 
+
+@media screen and (max-width: 768px) {
+    .chat-sidebar {
+        width: 100%;
+    }
+
+    .material-symbols-outlined {
+        font-size: 18px; /* Reducir el tamaño del icono para pantallas más pequeñas */
+    }
+    
+    .nav-list-logout,
+    .contact-icon {
+        left: 10px; /* Ajustar la posición para evitar desbordamiento */
+    }
+}
+
+
 /* Estilos generales para el chat */
 .chat-container {
     display: flex;
@@ -278,6 +296,7 @@ button:hover {
 }
 
 .chat-item {
+    display: block;
     padding: 10px 20px;
     border-bottom: 1px solid #007bff; /* Color principal de index.html */
     cursor: pointer;
