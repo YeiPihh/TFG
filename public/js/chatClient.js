@@ -116,9 +116,11 @@ chatForm.addEventListener('submit', (event) => {
 
         socket.emit('sendMessage', messageData);
 
-        const messageElement = document.createElement('p');
+        /*const messageElement = document.createElement('p');
+
+        
         messageElement.textContent = messageContent;
-        chatMessagesContainer.appendChild(messageElement);
+        chatMessagesContainer.appendChild(messageElement);*/
 
         // Auto-scroll al último mensaje
         chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
@@ -130,9 +132,19 @@ chatForm.addEventListener('submit', (event) => {
 });
 
 socket.on('receiveMessage', (messageData) => {
-    const messageElement = document.createElement('p');
-    messageElement.textContent = messageData.content; // Asegúrate de que "content" es la propiedad correcta
-    chatMessagesContainer.appendChild(messageElement);
+    const messageDiv = document.createElement('div'); // Crear un div en lugar de un p
+    const messageText = document.createElement('p'); // Puedes agregar un elemento p dentro del div para el texto
+    messageText.textContent = messageData.content;
+    messageDiv.appendChild(messageText);
+
+    // Verificar si el mensaje es del usuario actual
+    if (messageData.senderId === userId) { // Asegúrate de que userId contenga la ID del usuario actual
+        messageDiv.className = 'message-right'; // Clase para mensajes del usuario actual
+    } else {
+        messageDiv.className = 'message-left'; // Clase para mensajes de otros usuarios
+    }
+
+    chatMessagesContainer.appendChild(messageDiv);
     
     // Auto-scroll al último mensaje
     chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;

@@ -266,10 +266,28 @@ button:hover {
 
 
 
-/*chat.html*/
+/*chat.ejs*/
 /* Incorporando el estilo del ícono */
 .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 200, 'opsz' 40;
+}
+
+.message-right {
+    text-align: right;
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px; 
+    /* Otros estilos según tu diseño */
+}
+
+.message-left {
+    text-align: left;
+    background-color: #e0e0e0;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;  
+    /* Otros estilos según tu diseño */
 }
 
 
