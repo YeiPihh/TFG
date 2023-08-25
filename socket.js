@@ -51,29 +51,41 @@ module.exports = function(socketio) {
           });
 
 
-        socket.on('addContact', async (newContactUsername) => {
+          socket.on('addContact', async (newContactUsername) => {
             const userId = userIds[socket.id]; // Obtener el ID del usuario actual
         
             try {
                 // Buscar el ID del nuevo contacto en la base de datos
                 const [results] = await connection.query('SELECT id FROM users WHERE username = ?', [newContactUsername]);
+        
+                // Verificar si existe tal usuario
+                if (results.length === 0) {
+                    console.error('Usuario no encontrado');
+                    socket.emit('addContactError', 'Usuario no encontrado'); // Informar al cliente
+                    return;
+                }
+        
                 const contactId = results[0].id;
         
                 // Comprobar si ya existe una fila con este user_id y contact_id
                 const [existingContact] = await connection.query('SELECT * FROM contacts WHERE user_id = ? AND contact_id = ?', [userId, contactId]);
-                
+        
                 if (existingContact.length > 0) {
                     console.log('El contacto ya existe, no se agregará nuevamente.');
-                    return; // Salir temprano si el contacto ya existe
+                    socket.emit('addContactError', 'El contacto ya existe'); // Informar al cliente
+                    return;
                 }
         
                 // Insertar el nuevo contacto en la tabla 'contacts'
                 await connection.query('INSERT INTO contacts (user_id, contact_id) VALUES (?, ?)', [userId, contactId]);
                 console.log('Contacto añadido exitosamente');
+                socket.emit('addContactSuccess', 'Contacto añadido exitosamente'); // Informar al cliente
             } catch (error) {
                 console.error('Error al agregar contacto:', error);
+                socket.emit('addContactError', 'Error al agregar contacto'); // Informar al cliente
             }
         });
+        
 
         socket.on('sendMessage', async (data) => {
             
