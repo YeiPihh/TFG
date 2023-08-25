@@ -33,7 +33,8 @@ document.querySelector('#register-form').addEventListener('submit', (event) => {
   .then(data => {
       if (data.msg === 'User registered successfully') {
         alert(data.msg);
-        window.location.href = '/chat';
+        console.log(data.msg);
+        window.location.href = '/login';
       }  
       else if (data.msg === 'User already exists') {
         alert(data.msg);
