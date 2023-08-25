@@ -84,6 +84,7 @@ module.exports = function(socketio) {
                 console.error('Error al agregar contacto:', error);
                 socket.emit('addContactError', 'Error al agregar contacto'); // Informar al cliente
             }
+
         });
         
 

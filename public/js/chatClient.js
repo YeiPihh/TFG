@@ -82,8 +82,19 @@ document.getElementById('addContactForm').addEventListener('submit', (e) => {
   const newContactUsername = document.getElementById('newContactUsername').value;
   // Emitir un evento al servidor con el nuevo contacto
   socket.emit('addContact', newContactUsername);
-  // Opcionalmente, puedes ocultar el formulario nuevamente
+  // ocultar el formulario nuevamente
   document.getElementById('addContactForm').style.display = 'none';
+
+socket.on('addContactSuccess', (message) => {
+    console.log(message);
+    location.reload(); // Recarga la página
+});
+
+socket.on('addContactError', (message) => {
+    console.log(message);
+    alert('Error al añadir el contacto');
+});
+
 });
 
 document.addEventListener('DOMContentLoaded', () => {
