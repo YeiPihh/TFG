@@ -203,7 +203,7 @@ button:hover {
     
     overflow-y: auto; /* Permite el desplazamiento vertical */
     overflow-x: hidden;
-    max-height: 400px; /* Altura máxima antes de que comience el desplazamiento */
+     /* Altura máxima antes de que comience el desplazamiento */
 
 }
 
