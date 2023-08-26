@@ -22,8 +22,14 @@
         <!-- Aquí estarían los items de cada chat -->
         <div class="nav-list-chat">
             <% contacts.forEach(contact => { %>
-                <div class="chat-item" data-id="<%= contact.contact_id %>"><%= contact.username %></div>
-              <% }); %>
+                <div class="chat-item" data-id="<%= contact.contact_id %>">
+                    <span><img src='https://i.postimg.cc/fTDtfZZ7/usuario.png' alt='usuario' width="50px" height="50px"/></span>
+                    <div class="contactContainer">
+                        <span class="contactName" id="contactName_<%= contact.contact_id %>"><%= contact.username %></span>
+                        <span class="lastMessage" id="lastMessage_<%= contact.contact_id %>"><%= contact.lastMessage %></span>
+                    </div>
+                </div>
+            <% }); %>
         </div>
        
         <div class="nav-list-logout">
@@ -48,7 +54,7 @@
         </div>
 
         <div class="input-container" >
-            <form id="chat-form" style="display: none;">
+            <form id="chat-form" style="visibility: hidden;">
                 <input type="text" id="message-input" placeholder="Escribe tu mensaje...">
                 <button type="submit" id="icon-send" class="material-symbols-outlined">send</button>
             </form>
@@ -58,8 +64,7 @@
 
 <script>
     const username = '<%= user.username %>'; // Obtiene el nombre de usuario desde el servidor
-    const userId = '<%= user.id %>';
-    
+    const userId = '<%= user.id %>'; 
 </script>
 
 

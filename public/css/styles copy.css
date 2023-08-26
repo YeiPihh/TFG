@@ -65,6 +65,25 @@ button:hover {
     margin-top: 10px;
 }
 
+.nav-list-chat {
+    list-style: none;
+    flex-direction: column;
+    padding: 0;
+    display: flex;
+    padding: 20px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-list-chat-head {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    padding: 20px;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .username-side{
     margin-right: 20px;
     font-size: 25px!important;
@@ -113,10 +132,6 @@ button:hover {
 
 
 
-
-
-
-/*chat.ejs*/
 /* Estilos generales para el chat */
 .chat-container {
     display: flex;
@@ -134,69 +149,16 @@ button:hover {
     border-bottom-left-radius: 20px;
 }
 
-.nav-list-chat-head {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    padding: 20px;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.nav-list-chat {
-    list-style: none;
-    flex-direction: column;
-    padding: 0;
-    display: flex;
-    padding-left: 20px;
-    padding-right: 20px;
-    align-items: center;
-    
-}
-
 .chat-item {
-    padding: 30px;
-    border-top: 1px solid #007bff; /* Color principal de index.html */
-    cursor: pointer;
-    border-radius: 0px;
-    margin: 1px 1px;
-    transition: background-color 0.3s;
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-}
-
-.contactContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-left: 10px;  /* Ajustar según tus necesidades */
-}
-
-.chat-item .contactName {
-    font-size: 20px;
-    font-weight: bold;
-    letter-spacing: 4px;
-    margin-bottom: 5px;
-   
-}
-
-.lastMessage {
-    font-size: 14px;
-    color: #fff;
-
-}
-
-/*.chat-item {
-    display: block;
     padding: 10px 20px;
-    border-top: 0.5px solid #007bff;
-    border-bottom: 1px solid #007bff;  
+    border-bottom: 1px solid #007bff; /* Color principal de index.html */
     cursor: pointer;
-    border-radius: 0px;
+    border-radius: 20px;
     margin: 8px 12px;
     transition: background-color 0.3s;
-}*/
+    width: 100%;
+}
+
 
 
 .nav-list-chat {
@@ -236,6 +198,23 @@ button:hover {
     padding: 20px;
     border-bottom: 1px solid #bdc3c7;
 }
+/*
+.input-container {
+    display: flex;
+    padding: 15px;
+    align-items: center;
+    background-color: #f9f9f9;
+    border-bottom-right-radius: 20px;
+}*/
+
+/*#message-input {
+    flex-grow: 30px;  // Aumentado para que sea más largo 
+    padding: 10px 15px;
+    border: 1px solid #007bff;
+    border-radius: 20px;
+
+}*/
+
 
 .input-container {
     display: flex;
@@ -247,7 +226,6 @@ button:hover {
 
 #chat-form {
     display: flex;
-    flex-direction: row;
     align-items: center;
     width: 100%;
 }
@@ -272,6 +250,9 @@ button:hover {
     border-radius: 50%;
 }
 
+
+
+
 .material-symbols-outlined {
     cursor: pointer;
     background-color: #007bff;
@@ -280,6 +261,36 @@ button:hover {
     color: #ecf0f1;
     font-size: 20px;
 }
+
+
+
+
+
+
+/*chat.ejs*/
+/* Incorporando el estilo del ícono */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 200, 'opsz' 40;
+}
+
+.message-right {
+    text-align: right;
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px; 
+    /* Otros estilos según tu diseño */
+}
+
+.message-left {
+    text-align: left;
+    background-color: #e0e0e0;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;  
+    /* Otros estilos según tu diseño */
+}
+
 
 @media screen and (max-width: 768px) {
     .chat-sidebar {
@@ -296,23 +307,8 @@ button:hover {
     }
 }
 
-.message-left {
-    text-align: left;
-    background-color: #e0e0e0;
-    padding: 10px;
-    margin: 5px;
-    border-radius: 10px;  
-    /* Otros estilos según tu diseño */
-}
 
-.message-right {
-    text-align: right;
-    background-color: #f0f0f0;
-    padding: 10px;
-    margin: 5px;
-    border-radius: 10px; 
-}
-
+/* Estilos generales para el chat */
 .chat-container {
     display: flex;
     height: 100vh;
@@ -324,10 +320,19 @@ button:hover {
     background-color: #333; /* Oscuro igual que el footer de index.html */
     color: #ecf0f1;
     overflow-y: auto;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
 }
 
+.chat-item {
+    display: block;
+    padding: 10px 20px;
+    border-bottom: 1px solid #007bff; /* Color principal de index.html */
+    cursor: pointer;
+    border-radius: 20px;
+    margin: 8px 12px;
+    transition: background-color 0.3s;
+}
 
 .chat-item:hover {
     background-color: #007bff; /* Color principal de index.html */
@@ -359,6 +364,28 @@ button:hover {
     border-bottom: 1px solid #bdc3c7;
 }
 
+
+
+
+
+/*
+.input-container {
+    display: flex;
+    padding: 15px;
+    align-items: center;
+    background-color: #f9f9f9;
+    border-bottom-right-radius: 20px;
+}*/
+
+/*#message-input {
+    flex-grow: 30px;  // Aumentado para que sea más largo 
+    padding: 10px 15px;
+    border: 1px solid #007bff;
+    border-radius: 20px;
+
+}*/
+
+
 .input-container {
     display: flex;
     align-items: center;
@@ -369,7 +396,6 @@ button:hover {
 
 #chat-form {
     display: flex;
-    
     align-items: center;
     width: 100%;
 }
@@ -397,6 +423,14 @@ button:hover {
 
 
 
+.material-symbols-outlined {
+    cursor: pointer;
+    background-color: #007bff;
+    padding: 6px 8px;   
+    border-radius: 50%;
+    color: #ecf0f1;
+    font-size: 20px;
+}
 
 
 

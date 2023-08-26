@@ -14,19 +14,19 @@ require('./passport-config')(passport);
 const mysql = require('mysql2/promise');
 const url = require('url');
 
-const clearDBUrl = process.env.CLEARDB_DATABASE_URL; // URL de ClearDB de Heroku
+/*const clearDBUrl = process.env.CLEARDB_DATABASE_URL; // URL de ClearDB de Heroku
 const parsedUrl = url.parse(clearDBUrl);
-const [username, password] = parsedUrl.auth.split(':');
+const [username, password] = parsedUrl.auth.split(':');*/
 
 
 
 
 var connection;
 mysql.createConnection({
-  host: parsedUrl.hostname,
-  user: username,
-  password: password,
-  database: parsedUrl.pathname.substring(1)
+  host: 'localhost',
+  user: 'root',
+  password: 'toor',
+  database: 'dbChat'
 }).then(conn => {
     connection = conn;
 }).catch(err => {
@@ -36,6 +36,13 @@ mysql.createConnection({
 async function getContactsForUser(userId) {
   try {
     const [results] = await connection.query('SELECT c.contact_id, u.username FROM contacts c JOIN users u ON c.contact_id = u.id WHERE c.user_id = ?', [userId]);
+
+    for(let i = 0; i < results.length; i++) {
+      const contact = results[i];
+      const lastMessage = await getLastMessage(userId, contact.contact_id);
+      contact.lastMessage = lastMessage[0] ? lastMessage[0].content : null;
+    }
+
     return results;
   } catch (error) {
     console.error('Error al obtener contactos:', error);
@@ -57,13 +64,18 @@ async function getChatHistory(userId, contactId) {
   }
 }
 
-
-
-
-
-
-
-
+async function getLastMessage(userId, contactId) {
+  try {
+    const [result] = await connection.query(
+      'select content from messages where ((receiver_id=? and sender_id=?) or (receiver_id=? and sender_id=?)) and timestamp = (select max(timestamp) from messages where ((receiver_id = ? AND sender_id = ?) OR (receiver_id = ? AND sender_id = ?)))',
+      [userId, contactId, contactId, userId, userId, contactId, contactId, userId]
+    );
+    return result;
+  } catch (error) {
+    console.error('Error al obtener el ultimo mensaje del chat:', error);
+    return [];
+  }
+}
 
 
 app.set('view engine', 'ejs');
@@ -112,21 +124,25 @@ app.use('/login', loginRoute);
 app.get('/login', (req, res) => {
     res.sendFile(__dirname + '/public/login.html');
 });
+
 app.get('/register', (req, res) => {
     res.sendFile(__dirname + '/public/register.html');
 });
+
 app.get('/index', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
+
 app.get('/chat', ensureAuthenticated, async (req, res) => {
-    const user = {
-        username: req.user.username,
-        id: req.user.id // Aquí es donde obtienes el ID del usuario desde tu base de datos o sesión
-      };
+  const user = {
+    username: req.user.username,
+    id: req.user.id // Aquí es donde obtienes el ID del usuario desde tu base de datos o sesión
+  };
     
-    const contacts = await getContactsForUser(user.id);
-    res.render('chat', { user: user, contacts: contacts });
+  const contacts = await getContactsForUser(user.id);
+  res.render('chat', { user: user, contacts: contacts });
 });
+
 app.get('/logout', (req, res) => {
     req.session.destroy(function(err) {
         res.redirect('/login');  // Redirecciona al usuario a la página de inicio de sesión
@@ -134,14 +150,14 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/chat-history/:contactId', ensureAuthenticated, async (req, res) => {
-    const contactId = req.params.contactId;
-    const userId = req.user.id; // Suponiendo que tengas el ID del usuario en req.user
-  
-    // Aquí debes obtener el historial del chat desde la base de datos
-    const chatHistory = await getChatHistory(userId, contactId);
-  
-    res.json({ success: true, messages: chatHistory });
-  });
+  const contactId = req.params.contactId;
+  const userId = req.user.id; // Suponiendo que tengas el ID del usuario en req.user
+
+  // Aquí debes obtener el historial del chat desde la base de datos
+  const chatHistory = await getChatHistory(userId, contactId);
+
+  res.json({ success: true, messages: chatHistory });
+});
   
 
 

@@ -28,7 +28,7 @@ chatItems.forEach(item => {
     item.addEventListener('click', async (event) => {
         contactId = item.dataset.id;
         console.log("Contact ID:", contactId);
-        document.querySelector('#chat-form').style.display = 'block';
+        document.querySelector('#chat-form').style.visibility = 'visible';
         
 
         try {
@@ -75,25 +75,25 @@ homeButton.addEventListener('click', () => {
 
 document.getElementById('contactButton').addEventListener('click', () => {
     document.getElementById('addContactForm').style.display = 'block'; // Mostrar el formulario
-  });
+});
 
 document.getElementById('addContactForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const newContactUsername = document.getElementById('newContactUsername').value;
-  // Emitir un evento al servidor con el nuevo contacto
-  socket.emit('addContact', newContactUsername);
-  // ocultar el formulario nuevamente
-  document.getElementById('addContactForm').style.display = 'none';
+    e.preventDefault();
+    const newContactUsername = document.getElementById('newContactUsername').value;
+    // Emitir un evento al servidor con el nuevo contacto
+    socket.emit('addContact', newContactUsername);
+    // ocultar el formulario nuevamente
+    document.getElementById('addContactForm').style.display = 'none';
 
-socket.on('addContactSuccess', (message) => {
-    console.log(message);
-    location.reload(); // Recarga la página
-});
+    socket.on('addContactSuccess', (message) => {
+        console.log(message);
+        location.reload(); // Recarga la página
+    });
 
-socket.on('addContactError', (message) => {
-    console.log(message);
-    alert('Error al añadir el contacto');
-});
+    socket.on('addContactError', (message) => {
+        console.log(message);
+        alert('Error al añadir el contacto');
+    });
 
 });
 
@@ -102,17 +102,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactNameElement = document.getElementById('contactNameText');
   
     contactItems.forEach(item => {
-      item.addEventListener('click', () => {
-        const selectedContactName = item.textContent;
-        contactNameElement.textContent = selectedContactName;
-        
-        // Aquí puedes agregar lógica adicional si necesitas hacer algo más cuando se selecciona un contacto
-      });
+        item.addEventListener('click', () => {
+          /*const selectedContactName = item.textContent;
+          contactNameElement.textContent = selectedContactName;*/
+
+          const contactElement = item.querySelector('.contactName');
+          const selectedContactName = contactElement ? contactElement.textContent : '';
+          contactNameElement.textContent = selectedContactName;
+        });
     });
-  });
+});
 
 
-
+let lastMessage = null;
 chatForm.addEventListener('submit', (event) => {
     event.preventDefault(); // Esto previene la recarga de la página
 
@@ -124,17 +126,23 @@ chatForm.addEventListener('submit', (event) => {
             receiverId: contactId, // Asegúrate de tener el ID del destinatario
             content: messageContent,
         };
-
+        
         socket.emit('sendMessage', messageData);
 
         const messageElement = document.createElement('p');
 
         
-        messageElement.textContent = messageContent;
+        messageElement.textContent = messageContent
         chatMessagesContainer.appendChild(messageElement);
 
         // Auto-scroll al último mensaje
-        chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+        chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight
+
+        // Actualizar el último mensaje en la lista de contactos
+        const lastMessageElement = document.getElementById(`lastMessage_${contactId}`);
+        if (lastMessageElement) {
+            lastMessageElement.textContent = messageContent;
+        }
 
         // Limpiar el input
         messageInput.value = '';
@@ -142,11 +150,19 @@ chatForm.addEventListener('submit', (event) => {
     }
 });
 
+
+
 socket.on('receiveMessage', (messageData) => {
     const messageElement = document.createElement('p');
-    messageElement.textContent = messageData.content; // Asegúrate de que "content" es la propiedad correcta
+    messageElement.textContent = messageData.content;
     chatMessagesContainer.appendChild(messageElement);
     
+    const lastMessageElement = document.getElementById(`lastMessage_${messageData.senderId}`);
+    if (lastMessageElement) {
+        lastMessageElement.textContent = messageData.content;
+    }
+
     // Auto-scroll al último mensaje
     chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
 });
+
