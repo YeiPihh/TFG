@@ -11,6 +11,13 @@ const messageInput = document.getElementById('message-input');
 const sendIcon = document.getElementById('icon-send');
 const chatMessages = document.getElementById('chat-messages');
 
+const contactButton = document.getElementById('contactButton');
+const addContactForm = document.getElementById('addContactForm');
+
+const menuButton = document.getElementById('menuButton');
+const menuChat = document.getElementById('menuChat');
+const iconChatMobile = document.getElementById('iconChatMobile');
+
 let contactId= null;
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -73,8 +80,45 @@ homeButton.addEventListener('click', () => {
     window.location.href = '/index';
 });
 
-document.getElementById('contactButton').addEventListener('click', () => {
-    document.getElementById('addContactForm').style.display = 'block'; // Mostrar el formulario
+//Mostrar ocultar menu
+menuButton.addEventListener('click', (event) => {
+    event.stopPropagation();
+    if (menuChat.classList.contains("hidden")) {
+        menuChat.classList.remove("hidden");
+        menuChat.classList.add("visible");
+    } else {
+        menuChat.classList.remove("visible");
+        menuChat.classList.add("hidden");
+    }
+});
+
+
+
+// Mostrar/ocultar el formulario cuando se hace clic en el botón
+contactButton.addEventListener('click', (event) => {
+    event.stopPropagation(); // Prevenir que el evento se propague al documento
+    if (addContactForm.style.display === 'none' || addContactForm.style.display === '') {
+        addContactForm.style.display = 'block';
+    } else {
+        addContactForm.style.display = 'none';
+    }
+});
+
+// Ocultar el formulario cuando se hace clic en cualquier otro lugar
+document.addEventListener('click', (event) => {
+    if (addContactForm.style.display === 'block') {
+        addContactForm.style.display = 'none';
+    }
+
+    if (menuChat.classList.contains("visible")) {
+        menuChat.classList.remove("visible");
+        menuChat.classList.add("hidden");
+    }
+});
+
+// Prevenir que el formulario se oculte si se hace clic dentro de él
+addContactForm.addEventListener('click', (event) => {
+    event.stopPropagation();
 });
 
 document.getElementById('addContactForm').addEventListener('submit', (e) => {
@@ -92,7 +136,7 @@ document.getElementById('addContactForm').addEventListener('submit', (e) => {
 
     socket.on('addContactError', (message) => {
         console.log(message);
-        alert('Error al añadir el contacto');
+        alert(message);
     });
 
 });
@@ -166,3 +210,46 @@ socket.on('receiveMessage', (messageData) => {
     chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
 });
 
+
+//MOBILE DESING
+// Definir la media query
+const mediaQuery = window.matchMedia('(max-width: 900px)');
+
+// Función que manejará el cambio de diseño
+function handleTabletChange(e) {
+  // Comprobar si la media query es verdadera
+  if (e.matches) {
+    // Código para diseño de móvil
+    document.body.classList.add('mobile');
+  } else {
+    // Código para diseño de escritorio
+    document.body.classList.remove('mobile');
+  }
+}
+
+// Evento que se dispara cuando hay un cambio en la media query
+mediaQuery.addEventListener('change', handleTabletChange);
+
+// Llamada inicial para aplicar el diseño correcto
+handleTabletChange(mediaQuery);
+
+// Función para manejar el clic en un chat
+function handleChatClick() {
+    if (document.body.classList.contains('mobile')) {
+        document.querySelector('.chat-main').classList.add('active');
+        document.querySelector('.chat-sidebar').classList.remove('active'); // Ocultar el sidebar en modo móvil
+    } else {
+        document.querySelector('.chat-main').classList.remove('active');
+        document.querySelector('.chat-sidebar').classList.add('active'); // Mostrar el sidebar en modo escritorio
+    }
+}
+
+iconChatMobile.addEventListener('click', () => {
+    if (document.body.classList.contains('mobile')) {
+        document.querySelector('.chat-main').classList.remove('active');
+        document.querySelector('.chat-sidebar').classList.add('active'); // Ocultar el sidebar en modo móvil
+    } 
+});
+
+// Añadir el evento de clic a los elementos del chat
+chatItems.forEach(item => item.addEventListener('click', handleChatClick));

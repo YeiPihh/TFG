@@ -1,6 +1,6 @@
 <!--chat.ejs-->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,20 +10,48 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
 </head>
 <body>
 
 <div class="chat-container">
-    <div class="chat-sidebar">
+    <div class="chat-sidebar active">
         <div class="nav-list-chat-head">
-            <button id="homeButton" class="material-symbols-outlined">home</button>
+            <div class="containerMenu" charset="UTF-8"><span id="menuButton" class="material-symbols-outlined">menu</span>
+                <div id="menuChat" class="hidden">
+                    <div id="homeButton">
+                        <button class="material-symbols-outlined">home</button>
+                        <span class="text">volver al incio</span>
+                    </div>
+                    <div class="contact-icon">
+                        <form id="addContactForm" style="display: none;">
+                            <input type="text" id="newContactUsername" placeholder="Usuario del contacto" autocomplete="off" name="nombre_usuario_añadir">
+                            <button type="submit">Añadir</button>
+                        </form>
+                        <button id="contactButton" class="material-symbols-outlined">add_circle</button>
+                        <span class="text">Añadir contacto</span>
+                    </div>
+                    <div class="solicitud">
+                        <span class="material-symbols-outlined">mail</span>
+                        <span class="text">Solicitudes entrantes</span>
+                    </div>
+                    <div class="nav-list-logout">
+                        <button id="logoutButton" class="material-symbols-outlined">logout</button>
+                        <span class="text">Cerrar Sesion</span>
+                    </div>
+                </div>
+            </div>
             <span class="username-side"> <%= user.username %></span>
         </div>
         <!-- Aquí estarían los items de cada chat -->
         <div class="nav-list-chat">
+
             <% contacts.forEach(contact => { %>
                 <div class="chat-item" data-id="<%= contact.contact_id %>">
-                    <span><img src='https://i.postimg.cc/fTDtfZZ7/usuario.png' alt='usuario' width="50px" height="50px"/></span>
+                    <span><img src='https://i.postimg.cc/fTDtfZZ7/usuario.png' alt='usuario' width="50px" height="50px" id="imagenContact"/></span>
                     <div class="contactContainer">
                         <span class="contactName" id="contactName_<%= contact.contact_id %>"><%= contact.username %></span>
                         <span class="lastMessage" id="lastMessage_<%= contact.contact_id %>"><%= contact.lastMessage %></span>
@@ -31,21 +59,14 @@
                 </div>
             <% }); %>
         </div>
-       
-        <div class="nav-list-logout">
-            <button id="logoutButton" class="material-symbols-outlined">logout</button>
-        </div>
-        <div class="contact-icon">
-            <form id="addContactForm" style="display: none;">
-                <input type="text" id="newContactUsername" placeholder="Usuario del contacto">
-                <button type="submit">Añadir</button>
-              </form>
-            <button id="contactButton" class="material-symbols-outlined">add_circle</button>
-        </div>
     </div>
 
     <div class="chat-main">
         <div class="chat-header" id="contactName">
+            <div id="chats_mobile">
+                <span class="material-symbols-outlined" id="iconChatMobile">arrow_back_ios_new</span>
+            </div>
+            <span><img src='https://i.postimg.cc/fTDtfZZ7/usuario.png' alt='usuario' width="50px" height="50px" id="imagenChatContact"/></span>
            <p id="contactNameText"></p> 
         </div>
 
@@ -55,7 +76,7 @@
 
         <div class="input-container" >
             <form id="chat-form" style="visibility: hidden;">
-                <input type="text" id="message-input" placeholder="Escribe tu mensaje...">
+                <input type="text" id="message-input" placeholder="Escribe tu mensaje..." autocomplete="off" name="mensaje_para_enviar">
                 <button type="submit" id="icon-send" class="material-symbols-outlined">send</button>
             </form>
         </div>
