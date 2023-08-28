@@ -17,6 +17,7 @@ const addContactForm = document.getElementById('addContactForm');
 const menuButton = document.getElementById('menuButton');
 const menuChat = document.getElementById('menuChat');
 const iconChatMobile = document.getElementById('iconChatMobile');
+const imagenChatHeader = document.getElementById('imagenChatHeader');
 
 let contactId= null;
 
@@ -48,9 +49,13 @@ chatItems.forEach(item => {
             if (data.success && data.messages) {
                 chatMessagesContainer.innerHTML = '';
                 data.messages.forEach(message => {
-                    const messageElement = document.createElement('p');
+                    const messageElement = document.createElement('div');
                     messageElement.textContent = message.content;
                     chatMessagesContainer.appendChild(messageElement);
+                    if (imagenChatHeader.classList.contains("hidden")) {
+                        imagenChatHeader.classList.remove("hidden");
+                        imagenChatHeader.classList.add("visible");
+                    }
                 });
             } else {
                 console.error('Error al obtener el historial del chat:', data.error);
