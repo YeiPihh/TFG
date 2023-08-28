@@ -37,45 +37,61 @@ chatItems.forEach(item => {
         contactId = item.dataset.id;
         console.log("Contact ID:", contactId);
         document.querySelector('#chat-form').style.visibility = 'visible';
+
         
 
         try {
             const response = await fetch(`/chat-history/${contactId}`);
             const text = await response.text(); // Obtén la respuesta como texto
             console.log('Respuesta como texto:', text); // Imprímela en la consola
+            console.log(userId); 
 
             const data = JSON.parse(text); // Analiza la respuesta como JSON
+            console.log(data.messages);
 
             if (data.success && data.messages) {
                 chatMessagesContainer.innerHTML = '';
                 data.messages.forEach(message => {
                     const messageElement = document.createElement('div');
+                    const timeElement = document.createElement('div');
+
+                    if (message.sender_id == userId){
+                        messageElement.classList.add('myMessageContainer');
+                    } else {
+                        messageElement.classList.add('messageContainer');
+                    }
+
                     messageElement.textContent = message.content;
                     chatMessagesContainer.appendChild(messageElement);
+                    timeElement.textContent = message.timestamp;
+                    timeElement.classList.add('timeMessage');
+                    messageElement.appendChild(timeElement);
+
+                    //mostrar el contenido del header del chat
                     if (imagenChatHeader.classList.contains("hidden")) {
                         imagenChatHeader.classList.remove("hidden");
                         imagenChatHeader.classList.add("visible");
                     }
+
+                    //mostrar el contenido del chat history
+                    if (chatMessages.classList.contains("hidden")) {
+                        chatMessages.classList.remove("hidden");
+                        chatMessages.classList.add("visible");
+                    }
                 });
+
+                // Auto-scroll al último mensaje
+                chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight
+
             } else {
                 console.error('Error al obtener el historial del chat:', data.error);
             }
+
         } catch (error) {
             console.error('Error al hacer la solicitud:', error);
         }
     });
 });
-
-
-
-// Escuchar eventos del socket (esto es solo un ejemplo).
-socket.on('messageReceived', (data) => {
-    const messageElement = document.createElement('p');
-    messageElement.textContent = data.message;
-    chatMessages.appendChild(messageElement);
-});
-
-
 
 logoutButton.addEventListener('click', () => {
     window.location.href = '/logout';
@@ -169,7 +185,7 @@ chatForm.addEventListener('submit', (event) => {
 
     const messageContent = messageInput.value;
     if (messageContent.trim()) { // Solo enviar si el mensaje no está vacío
-        console.log('chatclient', contactId)
+        console.log('chatclient', contactId);
         const messageData = {
             senderId: userId, // Asegúrate de tener el ID del remitente
             receiverId: contactId, // Asegúrate de tener el ID del destinatario
@@ -178,9 +194,10 @@ chatForm.addEventListener('submit', (event) => {
         
         socket.emit('sendMessage', messageData);
 
-        const messageElement = document.createElement('p');
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('myMessageContainer');
 
-        
+
         messageElement.textContent = messageContent
         chatMessagesContainer.appendChild(messageElement);
 
@@ -199,10 +216,10 @@ chatForm.addEventListener('submit', (event) => {
     }
 });
 
-
-
+//escuchar evento del servidor cuando te envian un mensaje
 socket.on('receiveMessage', (messageData) => {
-    const messageElement = document.createElement('p');
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('messageContainer');
     messageElement.textContent = messageData.content;
     chatMessagesContainer.appendChild(messageElement);
     

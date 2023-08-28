@@ -18,9 +18,6 @@ const url = require('url');
 const parsedUrl = url.parse(clearDBUrl);
 const [username, password] = parsedUrl.auth.split(':');*/
 
-
-
-
 var connection;
 mysql.createConnection({
   host: 'localhost',
@@ -66,11 +63,11 @@ async function getChatHistory(userId, contactId) {
 
 async function getLastMessage(userId, contactId) {
   try {
-    const [result] = await connection.query(
+    const [results] = await connection.query(
       'select content from messages where ((receiver_id=? and sender_id=?) or (receiver_id=? and sender_id=?)) and timestamp = (select max(timestamp) from messages where ((receiver_id = ? AND sender_id = ?) OR (receiver_id = ? AND sender_id = ?)))',
       [userId, contactId, contactId, userId, userId, contactId, contactId, userId]
     );
-    return result;
+    return results;
   } catch (error) {
     console.error('Error al obtener el ultimo mensaje del chat:', error);
     return [];
@@ -151,7 +148,7 @@ app.get('/logout', (req, res) => {
 
 app.get('/chat-history/:contactId', ensureAuthenticated, async (req, res) => {
   const contactId = req.params.contactId;
-  const userId = req.user.id; // Suponiendo que tengas el ID del usuario en req.user
+  const userId = req.user.id;
 
   // Aquí debes obtener el historial del chat desde la base de datos
   const chatHistory = await getChatHistory(userId, contactId);

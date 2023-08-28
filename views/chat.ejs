@@ -24,7 +24,7 @@
                 <div id="menuChat" class="hidden">
                     <div id="homeButton">
                         <button class="material-symbols-outlined">home</button>
-                        <span class="text">volver al incio</span>
+                        <span class="text">Volver al incio</span>
                     </div>
                     <div class="contact-icon">
                         <form id="addContactForm" style="display: none;">
@@ -44,7 +44,10 @@
                     </div>
                 </div>
             </div>
-            <span class="username-side"> <%= user.username %></span>
+            <div class="profileImagenContainer">
+                <img src='https://i.postimg.cc/fTDtfZZ7/usuario.png' alt='usuario' width="40px" height="40px" id="imagenProfile"/>
+                <span class="username-side"> <%= user.username.toUpperCase(); %></span>
+            </div>
         </div>
         <!-- Aquí estarían los items de cada chat -->
         <div class="nav-list-chat">
@@ -53,7 +56,7 @@
                 <div class="chat-item" data-id="<%= contact.contact_id %>">
                     <span><img src='https://i.postimg.cc/fTDtfZZ7/usuario.png' alt='usuario' width="50px" height="50px" id="imagenContact"/></span>
                     <div class="contactContainer">
-                        <span class="contactName" id="contactName_<%= contact.contact_id %>"><%= contact.username %></span>
+                        <span class="contactName" id="contactName_<%= contact.contact_id %>"><%= contact.username.toUpperCase(); %></span>
                         <span class="lastMessage" id="lastMessage_<%= contact.contact_id %>"><%= contact.lastMessage %></span>
                     </div>
                 </div>
@@ -70,8 +73,9 @@
            <p id="contactNameText"></p> 
         </div>
 
-        <div class="chat-messages" id="chat-messages">
+        <div class="chat-messages hidden" id="chat-messages">
             <!-- Aquí se mostrarán los mensajes del chat -->
+            
         </div>
 
         <div class="input-container" >
