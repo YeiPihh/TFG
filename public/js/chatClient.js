@@ -53,6 +53,7 @@ chatItems.forEach(item => {
                 chatMessagesContainer.innerHTML = '';
                 data.messages.forEach(message => {
                     const messageElement = document.createElement('div');
+                    const messageElementText = document.createElement('p');
                     const timeElement = document.createElement('div');
 
                     if (message.sender_id == userId){
@@ -61,9 +62,12 @@ chatItems.forEach(item => {
                         messageElement.classList.add('messageContainer');
                     }
 
-                    messageElement.textContent = message.content;
+                    const timeStamp = message.timestamp.slice(11,16);
+
+                    messageElement.appendChild(messageElementText);
+                    messageElementText.textContent = message.content;
                     chatMessagesContainer.appendChild(messageElement);
-                    timeElement.textContent = message.timestamp;
+                    timeElement.textContent = timeStamp;
                     timeElement.classList.add('timeMessage');
                     messageElement.appendChild(timeElement);
 
@@ -195,10 +199,12 @@ chatForm.addEventListener('submit', (event) => {
         socket.emit('sendMessage', messageData);
 
         const messageElement = document.createElement('div');
+        const messageElementText = document.createElement('p');
+
         messageElement.classList.add('myMessageContainer');
 
-
-        messageElement.textContent = messageContent
+        messageElement.appendChild(messageElementText);
+        messageElementText.textContent = messageContent
         chatMessagesContainer.appendChild(messageElement);
 
         // Auto-scroll al último mensaje
@@ -219,9 +225,11 @@ chatForm.addEventListener('submit', (event) => {
 //escuchar evento del servidor cuando te envian un mensaje
 socket.on('receiveMessage', (messageData) => {
     const messageElement = document.createElement('div');
+    const messageElementText = document.createElement('p');
     messageElement.classList.add('messageContainer');
-    messageElement.textContent = messageData.content;
+    messageElementText.textContent = messageData.content;
     chatMessagesContainer.appendChild(messageElement);
+    messageElement.appendChild(messageElementText);
     
     const lastMessageElement = document.getElementById(`lastMessage_${messageData.senderId}`);
     if (lastMessageElement) {
