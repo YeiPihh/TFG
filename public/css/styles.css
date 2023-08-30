@@ -129,7 +129,7 @@ button:hover {
     overflow-y: auto;
     padding: 50px;
     border-bottom: 1px solid #bdc3c7;
-    max-width: 69vw;
+    max-width: 75vw;
 }
 
 .messageContainer {
@@ -148,7 +148,7 @@ button:hover {
 
 .myMessageContainer, .messageContainer{
     display: flex;
-    font-size: 17px;
+    font-size: 15px;
     margin-bottom: 1%;
     border-radius: 10px;
     max-width: 60%;
@@ -327,7 +327,7 @@ button:hover {
     position: relative;
     display: flex;
     flex-direction: column;
-    width: 25%;
+    width: 25vw;
     background-color: #333; /* Oscuro igual que el footer de index.html */
     color: #ecf0f1;
 }
@@ -468,11 +468,11 @@ button:hover {
     } 
 
     .chat-container .chat-sidebar {
-        width: 35%;
+        width: 35vw;
     }
 
     .chat-main .chat-messages {
-        max-width: 58vw!important;
+        max-width: 58vw;
     }
 
     .material-symbols-outlined {
@@ -556,6 +556,14 @@ button:hover {
 
     body.mobile #chat-messages .messageContainer p, body.mobile #chat-messages .myMessageContainer p{
         font-size: 12px;
+        max-width: 90%;
+        margin-right: 5px;
+    }
+
+    body.mobile .timeMessage{
+        margin: 0;
+        display: block;
+        align-self: flex-end;
     }
 
     body.mobile .chat-main.active {
@@ -564,7 +572,7 @@ button:hover {
     }
 
     body.mobile .chat-sidebar.active {
-        width: 100%;
+        width: 100vw;
         display: flex;
     }
 
@@ -574,6 +582,20 @@ button:hover {
         letter-spacing: 2px;
         margin-bottom: 3px;
     }
+
+    body.mobile .chat-container .chat-main .chat-messages {
+        max-width: 100vw;
+        padding: 15px;
+    }
+
+@media screen and (max-width: 400px) { 
+    body .messageContainer, #chat-messages .myMessageContainer{
+        max-width: 65%!important;
+    }
+    body #chat-messages .messageContainer p, body #chat-messages .myMessageContainer p{
+        max-width: 85%!important;
+    }
+}
 
 /*}*/
 

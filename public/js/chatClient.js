@@ -25,7 +25,6 @@ document.addEventListener("DOMContentLoaded", function() {
     //...
 });
 
-
 // Establecer conexión con Socket.io (asumiendo que tienes Socket.io configurado)   const socket = io();
 
 
