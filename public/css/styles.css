@@ -116,9 +116,6 @@ button:hover {
 
 
 
-
-
-
 /*chat.ejs*/
 /* Estilos generales para el chat */
 .chat-messages {
@@ -127,9 +124,10 @@ button:hover {
     flex-direction: column;
     flex: 1;
     overflow-y: auto;
-    padding: 50px;
+    padding: 30px;
     border-bottom: 1px solid #bdc3c7;
-    max-width: 75vw;
+    max-width: 70vw;
+    box-sizing: border-box;
 }
 
 .messageContainer {
@@ -327,7 +325,7 @@ button:hover {
     position: relative;
     display: flex;
     flex-direction: column;
-    width: 25vw;
+    width: 30vw;
     background-color: #333; /* Oscuro igual que el footer de index.html */
     color: #ecf0f1;
 }
@@ -456,7 +454,7 @@ button:hover {
     visibility: visible;
 }
 
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 1500px) {
     body .chat-item .contactName {
         font-size: 20px;
         font-weight: bold;
@@ -472,7 +470,9 @@ button:hover {
     }
 
     .chat-main .chat-messages {
-        max-width: 58vw;
+        max-width: 65vw;
+        padding: 30px;
+        box-sizing: border-box;
     }
 
     .material-symbols-outlined {
