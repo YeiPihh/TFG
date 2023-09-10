@@ -88,7 +88,7 @@ chatItems.forEach(item => {
                         imagenChatHeader.classList.add("visible");
                     }
 
-                    //mostrar el contenido del chat history
+                    //mostrar el contenido del chat history mediante clases que cambian las propiedades de display y visibility
                     if (chatMessages.classList.contains("hidden")) {
                         chatMessages.classList.remove("hidden");
                         chatMessages.classList.add("visible");
