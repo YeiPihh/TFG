@@ -1,5 +1,7 @@
 // chatClient.js
 // Obtener referencia a los elementos del DOM para usarlos como varibles.
+
+
 const chatForm = document.getElementById('chat-form');
 const chatItems = document.querySelectorAll('.chat-item');
 const chatMessagesContainer = document.getElementById('chat-messages');
@@ -118,8 +120,8 @@ homeButton.addEventListener('click', () => {
 
 
 //Mostrar ocultar menu
-menuButton.addEventListener('click', (event) => {
-    event.stopPropagation();
+menuButton.addEventListener('click', (e) => {
+    e.stopPropagation();
     if (menuChat.classList.contains("hidden")) {
         menuChat.classList.remove("hidden");
         menuChat.classList.add("visible");
@@ -127,6 +129,10 @@ menuButton.addEventListener('click', (event) => {
         menuChat.classList.remove("visible");
         menuChat.classList.add("hidden");
     }
+});
+
+menuChat.addEventListener('click', (e) => {
+    e.stopPropagation();
 });
 
 // Mostrar/ocultar el formulario de agregar contacto cuando se hace clic en el botón
@@ -149,6 +155,11 @@ document.addEventListener('click', (event) => {
         menuChat.classList.remove("visible");
         menuChat.classList.add("hidden");
     }
+
+    if (friendRequestsContainer.classList.contains('visible')) {
+        friendRequestsContainer.classList.remove("visible");
+        friendRequestsContainer.classList.add("hidden");
+    }
 });
 
 // Prevenir que el formulario se oculte si se hace clic dentro de él
@@ -157,29 +168,127 @@ addContactForm.addEventListener('click', (event) => {
 });
 
 // de la etiqueta addContactform creamos un evento para enviar un request al servidor de socketio para agregar un contacto
-document.getElementById('addContactForm').addEventListener('submit', (e) => {
+addContactForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
     // de la etiqueta newContactUsername obtenemos el valor para guardarlo en una constante
     const newContactUsername = document.getElementById('newContactUsername').value;
 
     // Emitimos un evento al servidor con el nuevo contacto
-    socket.emit('addContact', newContactUsername);
+    socket.emit('sendFriendRequest', newContactUsername);
 
     // ocultar el formulario nuevamente
-    document.getElementById('addContactForm').style.display = 'none';
+    addContactForm.style.display = 'none';
 
     // recargamos la pagina si se ha añadido el contacto
-    socket.on('addContactSuccess', (message) => {
-        console.log(message);
-        location.reload(); // Recarga la página
-    });
+});
 
-    // creamos un alert si no se ha podido agregar al contacto, el mensaje de error es controlado por el servidor
-    socket.on('addContactError', (message) => {
-        console.log(message);
-        alert(message);
+socket.on('friendRequestSuccess', (message) => {
+    Swal.fire({
+        title: 'Perfecto',
+        text: message,
+        icon: 'success',
+        confirmButtonText: 'Aceptar'
     });
+    console.log(message);
+    // location.reload(); // Recarga la página
+});
+
+// creamos un alert si no se ha podido agregar al contacto, el mensaje de error es controlado por el servidor
+socket.on('friendRequestError', (message) => {
+    console.log(message);
+    Swal.fire({
+        title: 'Oops...',
+        text: message,
+        icon: 'error',
+        confirmButtonText: 'Aceptar'
+    });
+});
+
+friendRequestButton = document.getElementById('friendRequestButton')
+friendRequestsContainer = document.getElementById('friendRequestsWrapper')
+
+friendRequestButton.addEventListener('click', async (e) => {
+
+    e.stopPropagation();
+
+    if (friendRequestsContainer.classList.contains('hidden')) {
+        friendRequestsContainer.classList.remove('hidden');
+        friendRequestsContainer.classList.add('visible');
+    } else {
+        friendRequestsContainer.classList.remove('visible');
+        friendRequestsContainer.classList.add('hidden');
+    }
+
+    try {
+      
+        const response = await fetch(`/friend-requests`);
+
+        // la variable response ahora contiene informacion de la base de datos de friend-requests
+        const text = await response.text();
+
+        const data = JSON.parse(text); 
+        console.log(data);
+        console.log(data.friendRequests);
+
+        // aqui comprobamos que las variables data.succes and data.messages no sean null
+        if (data.success && data.friendRequests) {
+            data.friendRequests.forEach(request => {
+                
+                // es importante vaciar el contenido del contenedor ya que estamos dentro de un evento click y si no se vacia experimentaremos duplicacion de solicitudes cada vez que se clickee el elemento
+                friendRequestsContainer.innerHTML = '<h3 style="margin:5px; margin-bottom:20px; text-align: center;">SOLICITUDES</h3>';
+                
+                const requestElement = document.createElement('div');
+                requestElement.classList.add('friendRequestContainer');
+
+                const requestElementText = document.createElement('div');
+                requestElementText.classList.add('nameRequestContainer');
+
+                const rEStatusContainer = document.createElement('div');
+                rEStatusContainer.classList.add('statusContainer');
+
+                const rEStatusButtonAccept = document.createElement('button');
+                rEStatusButtonAccept.classList.add('statusButtonAccept');
+                rEStatusButtonAccept.innerHTML = 'Aceptar';
+
+                const rEStatusButtonDeny = document.createElement('button');
+                rEStatusButtonDeny.classList.add('statusButtonDeny');
+                rEStatusButtonDeny.innerHTML = 'Denegar';
+
+                const timeElement = document.createElement('div');
+                timeElement.classList.add('timeRequestContainer');
+                const timeStamp = request.timestamp.slice(11,16);
+
+                const nameRequested = request.senderUsername.toUpperCase();
+                
+                // Establecer el contenido de los elementos
+                requestElementText.innerHTML = `<strong>${nameRequested}</strong>`;
+                timeElement.textContent = `${timeStamp}`;
+
+                // Añadir clases si es necesario, por ejemplo:
+                // requestElement.classList.add('request-element');
+                // timeElement.classList.add('time-element');
+
+                // Añadir los elementos al div principal
+                requestElement.appendChild(requestElementText);
+                requestElement.appendChild(rEStatusContainer);
+                rEStatusContainer.appendChild(rEStatusButtonAccept);
+                rEStatusContainer.appendChild(rEStatusButtonDeny);
+                rEStatusContainer.appendChild(timeElement);
+
+                // Añadir el div principal al DOM
+                friendRequestsContainer.appendChild(requestElement);
+
+            });
+        } else {
+            console.error('Error al obtener las solicitudes:', data.error);
+        }
+
+    } catch (error) {
+        console.error('Error al hacer la solicitud:', error);
+    }
+
+    
 });
 
 // en este evento esperamos a que el DOM se cargue por completo

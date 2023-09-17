@@ -4,7 +4,7 @@
   "description": "Chat de texto a tiempo real",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+  "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +21,7 @@
     "passport-local": "^1.0.0",
     "sequelize": "^6.32.1",
     "socket.io": "^4.7.2",
-    "socketio": "^1.0.0"
+    "socketio": "^1.0.0",
+    "sweetalert2": "^11.7.28"
   }
 }

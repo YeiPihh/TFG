@@ -13,7 +13,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:ital@0;1&display=swap');
     </style>
@@ -38,7 +39,10 @@
                         <span class="text">Añadir contacto</span>
                     </div>
                     <div class="solicitud">
-                        <span class="material-symbols-outlined">mail</span>
+                        <div id="friendRequestsWrapper" class="hidden">
+                            <!-- Aquí se mostrarán las solicitudes de amistad -->
+                        </div>
+                        <button id="friendRequestButton" class="material-symbols-outlined">mail</button>
                         <span class="text">Solicitudes entrantes</span>
                     </div>
                     <div class="nav-list-logout">
@@ -53,7 +57,7 @@
             </div>
         </div>
         <!-- Aquí estarían los items de cada chat -->
-        <div class="nav-list-chat">
+        <div class="nav-list-chat no-select">
 
             <% contacts.forEach(contact => { %>
                 <div class="chat-item" data-id="<%= contact.contact_id %>">
@@ -101,9 +105,9 @@
 <script src="./js/chatClient.js"></script>
 
 <script>
-    
     socket.emit('registerUser', { username: username, userId: userId }); // Envía el nombre de usuario al servidor
-  </script>
+</script>
+
   
 </body>
 </html>

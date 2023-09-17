@@ -9,8 +9,6 @@ const socketio = require('socket.io')(server);
 const passport = require('passport');
 require('./passport-config')(passport);
 
-
-
 const mysql = require('mysql2/promise');
 const url = require('url');
 
@@ -18,6 +16,8 @@ const url = require('url');
 const parsedUrl = url.parse(clearDBUrl);
 const [username, password] = parsedUrl.auth.split(':');*/
 
+
+// conexion a la base de datos
 var connection;
 mysql.createConnection({
   host: 'localhost',
@@ -29,6 +29,18 @@ mysql.createConnection({
 }).catch(err => {
     console.error('No se pudo conectar a la base de datos:', err);
 });
+
+async function getfriendRequestsData (userId) {
+  try {
+    // Realizar la consulta SQL para obtener todas las solicitudes de amistad para un usuario específico
+    const [results] = await connection.query('SELECT friend_requests.*, users.username AS senderUsername FROM friend_requests JOIN users ON friend_requests.sender_id = users.id WHERE friend_requests.receiver_id = ?', [userId]);
+
+    return results; // Esto devolverá un array de objetos, donde cada objeto representa una fila de la tabla
+  } catch (error) {
+    console.error('Error al obtener las solicitudes de amistad:', error);
+    return [];
+  }
+}
 
 async function getContactsForUser(userId) {
   try {
@@ -155,6 +167,13 @@ app.get('/chat-history/:contactId', ensureAuthenticated, async (req, res) => {
 
   res.json({ success: true, messages: chatHistory });
 });
+
+app.get('/friend-requests', ensureAuthenticated, async (req, res) => {
+  const userId = req.user.id;
+  const friendRequestsData = await getfriendRequestsData(userId);
+  res.json({ success: true, friendRequests: friendRequestsData });
+});
+
   
 
 
