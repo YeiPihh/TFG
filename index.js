@@ -179,7 +179,7 @@ app.get('/friend-requests', ensureAuthenticated, async (req, res) => {
 
 
 
-const port = process.env.PORT || 4567;
+const port = process.env.PORT || 5678;
 server.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
