@@ -167,8 +167,12 @@ app.get('/friend-requests', ensureAuthenticated, async (req, res) => {
   res.json({ success: true, friendRequests: friendRequestsData });
 });
 
+  
 
-const port = process.env.PORT || 4560;
+
+
+
+const port = process.env.PORT || 4567;
 server.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });

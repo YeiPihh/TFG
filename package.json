@@ -4,7 +4,7 @@
   "description": "Chat de texto a tiempo real",
   "main": "index.js",
   "scripts": {
-  "start": "nodemon index.js"
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,7 @@
     "express-validator": "^7.0.1",
     "git": "^0.1.5",
     "mysql2": "^3.6.0",
+    "nodemon": "^3.0.1",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "sequelize": "^6.32.1",
