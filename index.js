@@ -10,12 +10,6 @@ const passport = require('passport');
 require('./passport-config')(passport);
 
 const mysql = require('mysql2/promise');
-const url = require('url');
-
-/*const clearDBUrl = process.env.CLEARDB_DATABASE_URL; // URL de ClearDB de Heroku
-const parsedUrl = url.parse(clearDBUrl);
-const [username, password] = parsedUrl.auth.split(':');*/
-
 
 // conexion a la base de datos
 var connection;
@@ -61,7 +55,6 @@ async function getContactsForUser(userId) {
 
 async function getChatHistory(userId, contactId) {
   try {
-    // Ajusta esta consulta según tus necesidades
     const [results] = await connection.query(
       'SELECT m.* FROM messages m WHERE (m.sender_id = ? AND m.receiver_id = ?) OR (m.sender_id = ? AND m.receiver_id = ?) ORDER BY m.timestamp',
       [userId, contactId, contactId, userId]
@@ -102,17 +95,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Configura las sesiones ANTES de las rutas y Passport
+// Configurar las sesiones ANTES de las rutas y Passport
 app.use(session({
   secret: '020901',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false } // Cambia a true si estás usando HTTPS
+  cookie: { secure: false } // Cambia a true si se usas usando HTTPS
 }));
 
 // Inicialización de Passport
 app.use(passport.initialize());
-app.use(passport.session()); // <-- Asegúrate de que esta línea esté después de la configuración de session
+app.use(passport.session()); // <-- asegurarse de que esta línea esté después de la configuración de session
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
@@ -145,7 +138,7 @@ app.get('/index', (req, res) => {
 app.get('/chat', ensureAuthenticated, async (req, res) => {
   const user = {
     username: req.user.username,
-    id: req.user.id // Aquí es donde obtienes el ID del usuario desde tu base de datos o sesión
+    id: req.user.id // Aquí es donde se obtiene el ID del usuario desde la base de datos o sesión
   };
     
   const contacts = await getContactsForUser(user.id);
@@ -162,7 +155,7 @@ app.get('/chat-history/:contactId', ensureAuthenticated, async (req, res) => {
   const contactId = req.params.contactId;
   const userId = req.user.id;
 
-  // Aquí debes obtener el historial del chat desde la base de datos
+  // Aquí obtienes el historial del chat desde la base de datos
   const chatHistory = await getChatHistory(userId, contactId);
 
   res.json({ success: true, messages: chatHistory });
@@ -174,12 +167,8 @@ app.get('/friend-requests', ensureAuthenticated, async (req, res) => {
   res.json({ success: true, friendRequests: friendRequestsData });
 });
 
-  
 
-
-
-
-const port = process.env.PORT || 4567;
+const port = process.env.PORT || 4560;
 server.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });

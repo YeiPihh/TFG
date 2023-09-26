@@ -1,3 +1,0 @@
-el ultimo paso que hemos hecho ha sido modificar chat.html por chat.EJS y he añadido la funcionalidad de que se recuerde la sesion y la de cerrar sesion, tambien el hasheo de conrtraseñas
-
-el siguiente paso quiero que empiece la conexion entre usuarios en el chat y añadir los contactos

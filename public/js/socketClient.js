@@ -1,4 +1,4 @@
-// socketClient.js (ubicado en public/js/socketClient.js)
+// socketClient.js
 
 // Crear una instancia de Socket.IO para conectar al servidor
 const socket = io();
@@ -11,5 +11,3 @@ socket.on('connect', () => {
 socket.on('disconnect', () => {
   console.log('Desconectado del servidor de Socket.IO');
 });
-
-// Agregar más eventos Socket.IO aquí si es necesario

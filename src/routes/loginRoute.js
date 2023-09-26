@@ -2,11 +2,6 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql2/promise');
 var passport = require('passport');
-const url = require('url');
-
-/*const clearDBUrl = process.env.CLEARDB_DATABASE_URL; // URL de ClearDB de Heroku
-const parsedUrl = url.parse(clearDBUrl);
-const [username, password] = parsedUrl.auth.split(':');*/
 
 // Crea la conexión a la base de datos
 var connection;

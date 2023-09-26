@@ -16,6 +16,8 @@ const menuButton = document.getElementById('menuButton');
 const menuChat = document.getElementById('menuChat');
 const iconChatMobile = document.getElementById('iconChatMobile');
 const imagenChatHeader = document.getElementById('imagenChatHeader');
+const friendRequestButton = document.getElementById('friendRequestButton')
+const friendRequestsWrapper = document.getElementById('friendRequestsWrapper')
 
 // creamos una variable vacia para modificar su valor en un evento y poder usarlo en distintos eventos
 let contactId= null;
@@ -122,12 +124,16 @@ homeButton.addEventListener('click', () => {
 //Mostrar ocultar menu
 menuButton.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (menuChat.classList.contains("hidden")) {
+    if (menuChat.classList.contains("hidden")) { 
         menuChat.classList.remove("hidden");
         menuChat.classList.add("visible");
     } else {
         menuChat.classList.remove("visible");
         menuChat.classList.add("hidden");
+        addContactForm.classList.remove("visible");
+        addContactForm.classList.add("hidden");
+        friendRequestsWrapper.classList.remove("visible");
+        friendRequestsWrapper.classList.add("hidden");
     }
 });
 
@@ -138,17 +144,19 @@ menuChat.addEventListener('click', (e) => {
 // Mostrar/ocultar el formulario de agregar contacto cuando se hace clic en el botón
 contactButton.addEventListener('click', (event) => {
     event.stopPropagation(); // Prevenir que el evento se propague al documento
-    if (addContactForm.style.display === 'none' || addContactForm.style.display === '') {
-        addContactForm.style.display = 'block';
+    if (addContactForm.classList.contains("hidden")) {
+        addContactForm.classList.remove("hidden");
+        addContactForm.classList.add("visible");
     } else {
-        addContactForm.style.display = 'none';
+        addContactForm.classList.remove("visible");
+        addContactForm.classList.add("hidden");
     }
 });
 
 // Ocultar el formulario cuando se hace clic en cualquier otro lugar
-document.addEventListener('click', (event) => {
-    if (addContactForm.style.display === 'block') {
-        addContactForm.style.display = 'none';
+document.addEventListener('click', (e) => {
+    if (addContactForm.classList.contains("visible")) {
+        addContactForm.classList.add("hidden");
     }
 
     if (menuChat.classList.contains("visible")) {
@@ -156,15 +164,10 @@ document.addEventListener('click', (event) => {
         menuChat.classList.add("hidden");
     }
 
-    if (friendRequestsContainer.classList.contains('visible')) {
-        friendRequestsContainer.classList.remove("visible");
-        friendRequestsContainer.classList.add("hidden");
+    if (friendRequestsWrapper.classList.contains('visible')) {
+        friendRequestsWrapper.classList.remove("visible");
+        friendRequestsWrapper.classList.add("hidden");
     }
-});
-
-// Prevenir que el formulario se oculte si se hace clic dentro de él
-addContactForm.addEventListener('click', (event) => {
-    event.stopPropagation();
 });
 
 // de la etiqueta addContactform creamos un evento para enviar un request al servidor de socketio para agregar un contacto
@@ -205,20 +208,17 @@ socket.on('friendRequestError', (message) => {
     });
 });
 
-friendRequestButton = document.getElementById('friendRequestButton')
-friendRequestsContainer = document.getElementById('friendRequestsWrapper')
-
 friendRequestButton.addEventListener('click', async (e) => {
 
-    e.stopPropagation();
-
-    if (friendRequestsContainer.classList.contains('hidden')) {
-        friendRequestsContainer.classList.remove('hidden');
-        friendRequestsContainer.classList.add('visible');
+    if (friendRequestsWrapper.classList.contains('hidden')) {
+        friendRequestsWrapper.classList.remove('hidden');
+        friendRequestsWrapper.classList.add('visible');
     } else {
-        friendRequestsContainer.classList.remove('visible');
-        friendRequestsContainer.classList.add('hidden');
+        friendRequestsWrapper.classList.remove('visible');
+        friendRequestsWrapper.classList.add('hidden');
     }
+
+    
 
     try {
       
@@ -236,7 +236,7 @@ friendRequestButton.addEventListener('click', async (e) => {
             data.friendRequests.forEach(request => {
                 
                 // es importante vaciar el contenido del contenedor ya que estamos dentro de un evento click y si no se vacia experimentaremos duplicacion de solicitudes cada vez que se clickee el elemento
-                friendRequestsContainer.innerHTML = '<h3 style="margin:5px; margin-bottom:20px; text-align: center;">SOLICITUDES</h3>';
+                friendRequestsWrapper.innerHTML = '<h3 style="margin:5px; margin-bottom:20px; text-align: center;">SOLICITUDES</h3>';
                 
                 const requestElement = document.createElement('div');
                 requestElement.classList.add('friendRequestContainer');
@@ -277,7 +277,7 @@ friendRequestButton.addEventListener('click', async (e) => {
                 rEStatusContainer.appendChild(timeElement);
 
                 // Añadir el div principal al DOM
-                friendRequestsContainer.appendChild(requestElement);
+                friendRequestsWrapper.appendChild(requestElement);
 
             });
         } else {
@@ -383,28 +383,37 @@ socket.on('receiveMessage', (messageData) => {
     chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
 });
 
+// MAX WIDTH 1500PX DESIGN
+// const mediaQuery1500 = window.matchMedia('(max-width: 1500px)');
 
-//MOBILE DESING
-// Definir la media query
-const mediaQuery = window.matchMedia('(max-width: 900px)');
+// MOBILE DESIGN
+const mediaQuery1080 = window.matchMedia('(max-width: 1080px)');
 
-// Función que manejará el cambio de diseño
-function handleTabletChange(e) {
-  // Comprobar si la media query es verdadera
+// Función que manejará el cambio de diseño para 1500px
+/*function handleDesktopChange(e) {
   if (e.matches) {
-    // Código para diseño de móvil
+    document.body.classList.add('tablet');
+  } else {
+    document.body.classList.remove('tablet');
+  }
+} */
+
+// Función que manejará el cambio de diseño para 900px
+function handleMobileChange(e) {
+  if (e.matches) {
     document.body.classList.add('mobile');
   } else {
-    // Código para diseño de escritorio
     document.body.classList.remove('mobile');
   }
 }
 
 // Evento que se dispara cuando hay un cambio en la media query
-mediaQuery.addEventListener('change', handleTabletChange);
+// mediaQuery1500.addEventListener('change', handleDesktopChange);
+mediaQuery1080.addEventListener('change', handleMobileChange);
 
 // Llamada inicial para aplicar el diseño correcto
-handleTabletChange(mediaQuery);
+// handleDesktopChange(mediaQuery1500);
+handleMobileChange(mediaQuery1080);
 
 // Función para manejar el clic en un chat
 function handleChatClick() {

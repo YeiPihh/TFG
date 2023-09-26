@@ -14,7 +14,7 @@
     -khtml-user-select: none;    /* Konqueror */
     -moz-user-select: none;      /* Firefox */
     -ms-user-select: none;       /* Internet Explorer/Edge */
-    user-select: none;           /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+    user-select: none;
 }
 
 .swal2-container {
@@ -251,7 +251,7 @@ button:hover {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-left: 10px;  /* Ajustar según tus necesidades */
+    margin-left: 10px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -337,7 +337,6 @@ button:hover {
     padding: 10px;
     margin: 5px;
     border-radius: 10px;  
-    /* Otros estilos según tu diseño */
 }
 
 .message-right {
@@ -358,7 +357,7 @@ button:hover {
     display: flex;
     flex-direction: column;
     width: 30vw;
-    background-color: #333; /* Oscuro igual que el footer de index.html */
+    background-color: #333;
     color: #ecf0f1;
 }
 
@@ -444,14 +443,16 @@ button:hover {
     border: 1px solid #000;
     top: 5%;
     left: 105%;
-    min-width: 40vw;
+    width: 20vw;
     flex-direction: column;
+    box-sizing: border-box;
 }
 
 #friendRequestsWrapper .friendRequestContainer {
     display: flex;
     justify-content: space-between;
-    min-width: 35vw;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 #friendRequestsWrapper .friendRequestContainer .nameRequestContainer {
@@ -470,8 +471,6 @@ button:hover {
 .statusContainer {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    max-width: 40%;
     gap: 2%;
 }
 
@@ -521,7 +520,7 @@ button:hover {
 
 .hidden {
     visibility: hidden;
-    display: none;
+    display: none!important;
 }
 
 .visible {
@@ -598,20 +597,28 @@ button:hover {
         background-color: #ffffffef;
         padding: 10px;
         padding-left: 15px;
-        padding-right: 20px;
+        padding-right: 15px;
         border-radius: 10px;
         border: 1px solid #000;
-        top: 5%;
+        top: 0%;
         left: 105%;
-        min-width: 50vw;
+        width: 25vw;
         flex-direction: column;
+        box-sizing:border-box;
     }
 
     #friendRequestsWrapper .friendRequestContainer {
         display: flex;
+        width: 100%;
         justify-content: space-between;
-        min-width: 30vw;
+        box-sizing: border-box;
     }
+
+    #friendRequestsWrapper .friendRequestContainer .nameRequestContainer{ 
+        font-size: 15px;
+    }
+
+    
     
 }
 /*@media screen and (max-width: 800px ){*/
@@ -694,9 +701,9 @@ button:hover {
         padding-right: 10px;
         border-radius: 10px;
         border: 1px solid #000;
-        top: 140%;
-        left: 0%;
-        min-width: 80vw;
+        top: 0%;
+        left: 105%;
+        width: 40vw;
         flex-direction: column;
     }
 
@@ -707,15 +714,14 @@ button:hover {
         max-width: 100%;
     }
 
-    body.mobile #friendRequestsWrapper .timeRequestContainer{
+    body.mobile #friendRequestsWrapper .friendRequestContainer .timeRequestContainer {
         display: none;
     }
 
-    @media screen and (max-width: 490px) { 
-        body.mobile #friendRequestsWrapper .friendRequestContainer {
-            display: flex;
-            justify-content: space-between;
-            max-width: 79vw;
+
+    @media screen and (max-width: 700px) { 
+        body.mobile #friendRequestsWrapper {
+            width: 45vw;
         }
     }
 
